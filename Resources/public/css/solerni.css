@@ -1,0 +1,90 @@
+@CHARSET "UTF-8";
+
+.content {
+	padding-top:0;
+}
+
+/* hide progression */
+.bg-color-primary {
+	display:none;
+}
+
+/* reset value */
+.container{
+	width: auto;
+	min-width: 0;
+	padding: 0;
+}
+
+.slrn-back {
+}
+.slrn-back__link {
+	font-weight: bold;
+	padding: 0.66em;
+	color: #FFF;
+	display: block;
+	text-decoration: none;
+}
+.slrn-back__link:hover {
+	color: #FFF;
+}
+.no_underline,.no_underline:hover{
+	text-decoration: none;
+	margin-right: 5px;
+}
+
+h1 {
+	font-size: 28px;
+	color: #000;
+	margin: 10px 0;
+}
+H2{
+	font-size: 1.7em;
+	color: #000;
+}
+h3 {
+	font-size: 14px;
+	color: #000;
+	margin: 30px 0 20px 10px;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.drop__annoncement__badge{
+	background-color: #EEEEEF;
+	height: 60px;
+	margin-top: 30px;
+	padding: 10px 10px 10px 100px;
+	font-size: 1.2em;
+}
+.drop__annoncement__badge:before{
+	content: "";
+	top:0;
+	left:0;
+    position: absolute;
+    width: 35px;
+    height: 35px;
+	background-image: url('../images/sprites_solerni.png');
+	background-position: 0 0;
+}
+.collapse__div__instruction{
+	background-color: #EEEEEF;
+	height: 60px;
+	margin-top: 30px;
+	padding: 5px;
+	margin-left: 10px;
+	font-size: 1.2em;
+}
+
+.dropForum{
+	
+}
+.dropForum__title{
+	
+}
+.dropForum__content{
+	
+}
+.dropForum__button{
+	
+}

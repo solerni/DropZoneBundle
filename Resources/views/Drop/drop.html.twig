@@ -26,22 +26,71 @@
     display: block;
 }
 </style>
-    <div class="container">
-        <h3>
-            {{ 'Make my copy'|trans({}, 'icap_dropzone') }}
-        </h3>
+<section class="col-xs-12 col-md-12">
+ <div class="col-xs-3 col-md-3">
+        {# FIRST : MOOC  WIDGET #}
+        {% render controller(
+            'OrangeThemeBundle:Solerni:getWorkspacePresentationWidget',
+            {'workspaceId': workspace.getId() }
+        ) %}
+        <div class='col-xs-12 col-md-12 slrn-widget'>
+	        <div class='row slrn-back bg-color-grey-2'>
+	            <a href="{{ app.session.get('solerni_apprendre_url') }}" class='slrn-back__link'><i class="icon-chevron-left no_underline"></i>{{ 'returnMOOC' | trans }}</a>
+	        
+	        </div>
+        </div>
+        
+</div>
+<div class='col-xs-9 col-md-9'>
+    <div class="container-fluid">
 
+
+        
+        
         {{ macros.flashBox() }}
+        
+        <div class='drop__annoncement__badge' style='background-image:url()'>
+            Badge de compétence en cours d'évalution<br/>
+            <span class='bold'>&laquo;Travail et digital&raquo;</span>
+        </div>
+
+        <h2>{{ 'welcome_constit1'|trans({}, 'solerni') }}- {{ 'step1'|trans({}, 'solerni') }}</h2>      
+            
+            <hr/>
+            <div class="row">
+            <div class='col-xs-12 col-md-12'>
+	            <div class='col-xs-9 col-md-9'>
+	            
+		            {{ 'date_limite'|trans({}, 'solerni') }} {{  dropzone.endAllowDrop|date('d/m/Y') }}  
+		            
+		            <div class='collapse__div'>
+		                <h3 class='collapse__h2'>Rappel des instructions pour constituer mon dossier</h3>
+		                <div  class='collapse__div__instruction'>{% if dropzone.instruction != null %}{{ dropzone.instruction|raw }}{% endif %}</div>
+		            </div>     
+		            
+		            <script>
+		
+		
+		         
+		            $( document ).ready(function() {
+		              $(".collapse__div").collapse({
+		                query: 'h3'
+		              });
+		            });
+		            
+		        </script> 
 
         {# DROP STATUS BAR #}
-        {% include 'IcapDropzoneBundle:Drop:dropStatus.html.twig' %}
+{#        {% include 'IcapDropzoneBundle:Drop:dropStatus.html.twig' %} #}
 
-        {% if dropzone.instruction != null %}
+ {#       {% if dropzone.instruction != null %}
             {%  include 'IcapDropzoneBundle:Dropzone:recallInstruction.html.twig' %}
             <br/>
-        {% endif %}
+        {% endif %}   #}
 
-        <h4>{{ 'Documents added  the copy'|trans({},'icap_dropzone')}}</h4>
+{#        <h4>{{ 'Documents added  the copy'|trans({},'icap_dropzone')}}</h4> #}
+
+        <h3>{{ 'yourFiles'|trans({},'solerni') }}</h3>
 
         {% if drop.documents|length <= 0%}
             {{ 'no document added yet'|trans({},'icap_dropzone')}}
@@ -78,7 +127,13 @@
             {% endif %}
 
         </div>
-
+	    </div>
+	    </div>
+	    </div> {# END ROW #}
+    
+        <div class="row">
+        <div class='col-xs-12 col-md-12'>
+	        <hr/>
 
         <form  id='dropzone_global_drop_form' class="form-horizontal" method="POST" action="{{ path('icap_dropzone_drop', {'resourceId': dropzone.id}) }}">
             <div class="{% if form.vars.errors|length > 0 %}has-error{% endif %}">
@@ -122,9 +177,10 @@
             {{ form_end(form) }}
 
         <br/>
-    </div>
+    </div></div></div>
 
     <div id="picker-wrapper"></div>
+</div></section> 
 {% endblock %}
 
 {% block javascripts %}

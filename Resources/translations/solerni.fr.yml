@@ -1,0 +1,26 @@
+
+addDocument: 'Ajouter un document'
+addDocument__PC: 'Fichier depuis mon ordinateur'
+
+buttonStart: 'Ok, commencer à constituer mon dossier de preuves'
+
+checkboxStart: 'Je souhaite “soumettre mes preuves de compétences” et “je m''engage à évaluer 3 autres retours de preuve”'
+
+date_limite: 'Date limite pour déposer vos preuves : le'
+
+forumTitle: 'Forum'
+forumContent: 'Discuter, échanger, poser des questions sur le sujet, à tous moments avec vos pairs'
+forumButton: 'Discuter'
+
+step1: 'étape 1/5'
+step2: 'étape 2/5'
+step3: 'étape 3/5'
+step4: 'étape 4/5'
+step5: 'étape 5/5'
+
+faq : 'FAQ'
+
+welcome: 'Bienvenue dans votre espace de travail'
+welcome_constit1: 'Constituez votre dosssier de preuves'
+
+yourFiles: 'Votre dossier de preuves : '
