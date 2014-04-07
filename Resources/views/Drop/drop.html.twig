@@ -93,13 +93,14 @@
         <h3>{{ 'yourFiles'|trans({},'solerni') }}</h3>
 
         {% if drop.documents|length <= 0%}
-            {{ 'no document added yet'|trans({},'icap_dropzone')}}
+         {#   {{ 'no document added yet'|trans({},'icap_dropzone')}} #}
         {% endif %}
         
         <br />
         {% set documentListText = 'Documents'|trans({}, 'icap_dropzone') %}
-        {{ dropzoneMacros.displayDocumentsList(drop, dropzone, 12, "complete", documentListText) }}
-
+        {% if drop.documents|length > 0 %} 
+           {{ dropzoneMacros.displayDocumentsList(drop, dropzone, 12, "complete", documentListText) }}
+        {% endif %}
         <div class="show-during-add" style="display: none;">
             <hr/>
             <div class="container-inline"></div>
