@@ -15,10 +15,8 @@ use Icap\DropzoneBundle\Entity\Dropzone;
 use Icap\DropzoneBundle\Event\Log\LogCorrectionUpdateEvent;
 use Icap\DropzoneBundle\Event\Log\LogDropEndEvent;
 use Icap\DropzoneBundle\Event\Log\LogDropStartEvent;
-use Icap\DropzoneBundle\Event\Log\LogDropReportEvent;
 use Icap\DropzoneBundle\Form\CorrectionReportType;
 use Icap\DropzoneBundle\Form\DropType;
-use Icap\DropzoneBundle\Form\DocumentType;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Pagerfanta\Pagerfanta;
@@ -88,10 +86,6 @@ class DropController extends DropzoneBaseController
         }
 
         $form = $this->createForm(new DropType(), $notFinishedDrop);
-        $form_url = $this->createForm(new DocumentType(), null, array('documentType' => 'url'));
-        $form_file = $this->createForm(new DocumentType(), null, array('documentType' => 'file'));
-        $form_resource = $this->createForm(new DocumentType(), null, array('documentType' => 'resource'));
-        $form_text = $this->createForm(new DocumentType(), null, array('documentType' => 'text'));
         $drop = $notFinishedDrop;
 
         if ($this->getRequest()->isMethod('POST')) {
@@ -135,22 +129,14 @@ class DropController extends DropzoneBaseController
 
         $resourceTypes = $this->getDoctrine()->getRepository('ClarolineCoreBundle:Resource\ResourceType')->findAll();
 
-        $dropzoneManager = $this->get('icap.manager.dropzone_manager');
-        $dropzoneProgress = $dropzoneManager->getDropzoneProgressByUser($dropzone,$user);
-
         return array(
             'workspace' => $dropzone->getResourceNode()->getWorkspace(),
             '_resource' => $dropzone,
             'dropzone' => $dropzone,
             'drop' => $drop,
             'form' => $form->createView(),
-            'form_url' => $form_url->createView(),
-            'form_file' => $form_file->createView(),
-            'form_resource' => $form_resource->createView(),
-            'form_text' => $form_text->createView(),
             'allowedTypes' => $allowedTypes,
-            'resourceTypes' => $resourceTypes,
-            'dropzoneProgress' => $dropzoneProgress,
+            'resourceTypes' => $resourceTypes
         );
     }
 
@@ -164,7 +150,12 @@ class DropController extends DropzoneBaseController
     }
 
     /**
-     * 
+     * @Route(
+     *      "/{resourceId}/drops",
+     *      name="icap_dropzone_drops",
+     *      requirements={"resourceId" = "\d+"},
+     *      defaults={"page" = 1}
+     * )
      * @Route(
      *      "/{resourceId}/drops/by/user",
      *      name="icap_dropzone_drops_by_user",
@@ -187,121 +178,6 @@ class DropController extends DropzoneBaseController
 
         $dropRepo = $this->getDoctrine()->getManager()->getRepository('IcapDropzoneBundle:Drop');
         $dropsQuery = $dropRepo->getDropsFullyCorrectedOrderByUserQuery($dropzone);
-
-        $adapter = new DoctrineORMAdapter($dropsQuery);
-        $pager = new Pagerfanta($adapter);
-        $pager->setMaxPerPage(DropzoneBaseController::DROP_PER_PAGE);
-        try {
-            $pager->setCurrentPage($page);
-        } catch (NotValidCurrentPageException $e) {
-            if ($page > 0) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'icap_dropzone_drops_by_user_paginated',
-                        array(
-                            'resourceId' => $dropzone->getId(),
-                            'page' => $pager->getNbPages()
-                        )
-                    )
-                );
-            } else {
-                throw new NotFoundHttpException();
-            }
-        }
-
-        return $this->addDropsStats($dropzone, array(
-            'workspace' => $dropzone->getResourceNode()->getWorkspace(),
-            '_resource' => $dropzone,
-            'dropzone' => $dropzone,
-            'pager' => $pager
-        ));
-    }
-
-    /**
-     * @Route(
-     *      "/{resourceId}/drops",
-     *      name="icap_dropzone_drops",
-     *      requirements={"resourceId" = "\d+"},
-     *      defaults={"page" = 1}
-     * )
-     * @Route(
-     *      "/{resourceId}/drops/by/default",
-     *      name="icap_dropzone_drops_by_default",
-     *      requirements={"resourceId" = "\d+"},
-     *      defaults={"page" = 1}
-     * )
-     * @Route(
-     *      "/{resourceId}/drops/by/default/{page}",
-     *      name="icap_dropzone_drops_by_default_paginated",
-     *      requirements={"resourceId" = "\d+", "page" = "\d+"},
-     *      defaults={"page" = 1}
-     * )
-     * 
-     * @ParamConverter("dropzone", class="IcapDropzoneBundle:Dropzone", options={"id" = "resourceId"})
-     * @Template()
-     **/
-    public function dropsByDefaultAction($dropzone,$page)
-    {
-        $this->isAllowToOpen($dropzone);
-        $this->isAllowToEdit($dropzone);
-
-        $dropRepo = $this->getDoctrine()->getManager()->getRepository('IcapDropzoneBundle:Drop');
-        $dropsQuery = $dropRepo->getDropsFullyCorrectedOrderByReportAndDropDateQuery($dropzone);
-
-        $adapter = new DoctrineORMAdapter($dropsQuery);
-        $pager = new Pagerfanta($adapter);
-        $pager->setMaxPerPage(DropzoneBaseController::DROP_PER_PAGE);
-        try {
-            $pager->setCurrentPage($page);
-        } catch (NotValidCurrentPageException $e) {
-            if ($page > 0) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'icap_dropzone_drops_by_user_paginated',
-                        array(
-                            'resourceId' => $dropzone->getId(),
-                            'page' => $pager->getNbPages()
-                        )
-                    )
-                );
-            } else {
-                throw new NotFoundHttpException();
-            }
-        }
-
-        return $this->addDropsStats($dropzone, array(
-            'workspace' => $dropzone->getResourceNode()->getWorkspace(),
-            '_resource' => $dropzone,
-            'dropzone' => $dropzone,
-            'pager' => $pager
-        ));
-    }
-
-    /**
-     * 
-     * @Route(
-     *      "/{resourceId}/drops/by/report",
-     *      name="icap_dropzone_drops_by_report",
-     *      requirements={"resourceId" = "\d+"},
-     *      defaults={"page" = 1}
-     * )
-     * @Route(
-     *      "/{resourceId}/drops/by/report/{page}",
-     *      name="icap_dropzone_drops_by_report_paginated",
-     *      requirements={"resourceId" = "\d+", "page" = "\d+"},
-     *      defaults={"page" = 1}
-     * )
-     * 
-     * @ParamConverter("dropzone", class="IcapDropzoneBundle:Dropzone", options={"id" = "resourceId"})
-     * @Template()
-     */
-    public function dropsByReportAction($dropzone,$page)
-    {
-        $this->isAllowToOpen($dropzone);
-        $this->isAllowToEdit($dropzone);
-
-        $dropRepo = $this->getDoctrine()->getManager()->getRepository('IcapDropzoneBundle:Drop');
-        $dropsQuery = $dropRepo->getDropsFullyCorrectedReportedQuery($dropzone);
 
         $adapter = new DoctrineORMAdapter($dropsQuery);
         $pager = new Pagerfanta($adapter);
@@ -528,53 +404,6 @@ class DropController extends DropzoneBaseController
 
     /**
      * @Route(
-     *      "/{resourceId}/drop/detail/{dropId}",
-     *      name="icap_dropzone_drop_detail_by_user",
-     *      requirements={"resourceId" = "\d+", "dropId" = "\d+"}
-     * )
-     * @ParamConverter("dropzone", class="IcapDropzoneBundle:Dropzone", options={"id" = "resourceId"})
-     * @ParamConverter("drop", class="IcapDropzoneBundle:Drop", options={"id" = "dropId"})
-     * @Template()
-     */
-    public function dropDetailAction($dropzone,$drop)
-    {
-        // check  if the User is allowed to open the dropZone.
-        $this->isAllowToOpen($dropzone);
-        // getting the userId to check if the current drop owner match with the loggued user.
-        $userId = $this->get('security.context')->getToken()->getUser()->getId();
-
-        // getting the data
-        $drop = $this->getDoctrine()
-            ->getRepository('IcapDropzoneBundle:Drop')
-            ->getDropAndValidEndedCorrectionsAndDocumentsByUser($dropzone,$drop->getId(),$userId);
-
-        // if there is no result ( user is not the owner, or the drop has not ended Corrections , show 404)
-        if(count($drop) == 0)
-        {
-            throw new NotFoundHttpException(); 
-        }else
-        {
-            $drop = $drop[0];
-        }
-        /*
-        $corrections = $drop->getCorrections();
-        echo count($corrections);
-        var_dump($corrections);
-        die;
-        */
-        return array(
-            'workspace' => $dropzone->getResourceNode()->getWorkspace(),
-            '_resource' => $dropzone,
-            'dropzone' => $dropzone,
-            'drop' => $drop
-        );
-    }
-
-
-
-
-    /**
-     * @Route(
      *      "/{resourceId}/report/drop/{dropId}/{correctionId}",
      *      name="icap_dropzone_report_drop",
      *      requirements={"resourceId" = "\d+", "dropId" = "\d+", "correctionId" = "\d+"}
@@ -593,7 +422,6 @@ class DropController extends DropzoneBaseController
         if ($this->getRequest()->isMethod('POST')) {
             $form->handleRequest($this->getRequest());
             if ($form->isValid()) {
-
                 $drop->setReported(true);
                 $correction->setReporter(true);
                 $correction->setEndDate(new \DateTime());
@@ -605,13 +433,11 @@ class DropController extends DropzoneBaseController
                 $em->persist($correction);
                 $em->flush();
 
-                $this->dispatchDropReportEvent($dropzone,$drop,$correction);
                 $this
                     ->getRequest()
                     ->getSession()
                     ->getFlashBag()
                     ->add('success', $this->get('translator')->trans('Your report has been saved', array(), 'icap_dropzone'));
-
 
                 return $this->redirect(
                     $this->generateUrl(
@@ -639,16 +465,6 @@ class DropController extends DropzoneBaseController
         ));
     }
 
-    protected function dispatchDropReportEvent(Dropzone $dropzone, Drop $drop,Correction $correction)
-    {
-        $rm = $this->get('claroline.manager.role_manager');
-        $event = new LogDropReportEvent($dropzone,$drop,$correction,$rm);
-        $this->get('event_dispatcher')->dispatch('log', $event);
-    }
-
-
-
-
     /**
      * @Route(
      *      "/{resourceId}/remove/report/{dropId}/{correctionId}/{invalidate}",
@@ -662,7 +478,6 @@ class DropController extends DropzoneBaseController
      */
     public function removeReportAction(Dropzone $dropzone, Drop $drop, Correction $correction, $invalidate)
     {
-
         $this->isAllowToOpen($dropzone);
         $this->isAllowToEdit($dropzone);
 

@@ -9,24 +9,7 @@
     <li class="active"> {{ 'Make my copy'|trans({}, 'icap_dropzone') }}</li>
 {% endblock %}
 
-{% block dropzone_content %}
-<style>
-.dropzone-form-control-reduced
-{
-    width: 80%;
-}
-.dropzone-form-clean
-{
-    clear:both;
-}
-
-.dropzone_button_textarea
-{
-    float: left;
-    display: block;
-}
-</style>
-<section class="col-xs-12 col-md-12">
+{% block dropzone_content %}<section class="col-xs-12 col-md-12">
  <div class="col-xs-3 col-md-3">
         {# FIRST : MOOC  WIDGET #}
         {% render controller(
@@ -43,9 +26,6 @@
 </div>
 <div class='col-xs-9 col-md-9'>
     <div class="container-fluid">
-
-
-        
         
         {{ macros.flashBox() }}
         
@@ -68,6 +48,17 @@
 		                <div  class='collapse__div__instruction'>{% if dropzone.instruction != null %}{{ dropzone.instruction|raw }}{% endif %}</div>
 		            </div>     
 		            
+		            {#<div class="btn-group">
+					    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+					      {{ 'addDocument'|trans({}, 'solerni') }}
+					      <span class="caret"></span>
+					    </button>
+					    <ul class="dropdown-menu">
+					      <li><a href="#">{{ 'addDocument_PC'|trans({}, 'solerni') }}</a></li>
+					      <li><a href="#">Dropdown link</a></li>
+					    </ul>
+					  </div> #}
+		             
 		            <script>
 		
 		
@@ -79,113 +70,115 @@
 		            });
 		            
 		        </script> 
-
-        {# DROP STATUS BAR #}
-{#        {% include 'IcapDropzoneBundle:Drop:dropStatus.html.twig' %} #}
-
- {#       {% if dropzone.instruction != null %}
-            {%  include 'IcapDropzoneBundle:Dropzone:recallInstruction.html.twig' %}
-            <br/>
-        {% endif %}   #}
-
-{#        <h4>{{ 'Documents added  the copy'|trans({},'icap_dropzone')}}</h4> #}
-
-        <h3>{{ 'yourFiles'|trans({},'solerni') }}</h3>
-
-        {% if drop.documents|length <= 0%}
-         {#   {{ 'no document added yet'|trans({},'icap_dropzone')}} #}
-        {% endif %}
+		        
+		        
+		       {# {% if dropzone.instruction != null %}
+		            {%  include 'IcapDropzoneBundle:Dropzone:recallInstruction.html.twig' %}
+		            <br/>
+		        {% endif %}  #}
+		        
+		        <h3>{{ 'yourFiles'|trans({},'solerni') }}</h3>
+		
+		        {% if allowedTypes|length <= 0 %}
+		            <span class="text-danger">{{ 'No document type allowed'|trans({}, 'icap_dropzone') }}</span>
+		        {% elseif allowedTypes|length == 1 %}
+		            <a class="btn btn-primary launch-inline disabled-during-add btn_gris {% if allowedTypes.0 == 'resource' %}launch-resource-picker{% endif %}" href="{{ path('icap_dropzone_document', {'resourceId': dropzone.id, 'documentType': allowedTypes.0, 'dropId': drop.id}) }}">{{ 'Add a document'|trans({}, 'icap_dropzone') }}</a>
+		        {% else %}
+		            <div class="dropdown">
+		                <a data-toggle="dropdown" class="btn btn-primary disabled-during-add btn_gris" href="#">{{ 'Add a document'|trans({}, 'icap_dropzone') }}</a>
+		                <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4">
+		                    {% for allowedType in allowedTypes %}
+		                        <li role="presentation"><a role="menuitem" tabindex="-1" class="launch-inline disabled-during-add {% if allowedType == 'resource' %}launch-resource-picker{% endif %}" href="{{ path('icap_dropzone_document', {'resourceId': dropzone.id, 'documentType': allowedType, 'dropId': drop.id}) }}">{{ allowedType|trans({}, 'icap_dropzone') }}</a></li>
+		                    {% endfor %}
+		                </ul>
+		            </div>
+		        {% endif %}
+		
+		
+		        {% for document in drop.documents %}
+		            <hr/>
+		            <div class="row">
+		                <div class="col-md-9">
+		                    {% include 'IcapDropzoneBundle:Document:simpleShowDocument.html.twig' %}
+		                </div>
+		
+		                <div class="col-md-3">
+		                    <a href="{{ path('icap_dropzone_delete_document', {'resourceId': dropzone.id, 'dropId': drop.id, 'documentId': document.id}) }}" class="btn btn-danger btn-sm pull-right launch-modal"><span class="glyphicon icon-trash"></span> {{ 'Delete'|trans({}, 'icap_dropzone') }}</a>
+		                </div>
+		            </div>
+		        {% endfor %}
+		
+		        <div class="show-during-add" style="display: none;">
+		            <hr/>
+		            <div class="container-inline"></div>
+		        </div>
+	
+	        </div>
+	        <div class='col-xs-3 col-md-3'>
+	        
+	        
+	         <div class='dropForum'>
+	           <div class='dropForum__title'>{{ 'forumTitle'|trans({}, 'solerni') }}</div>
+	           <div class='dropForum__content'>{{ 'forumContent'|trans({}, 'solerni') }}</div>
+	           <div class='dropForum__button'><a data-toggle="dropdown" class="btn btn-primary disabled-during-add btn_gris" href="#">{{ 'forumButton'|trans({}, 'solerni') }}</a></div>
+	         </div>
+	        
+	        
+	        
+	        </div>
+        </div>
+        </div> {# end contener #}
         
-        <br />
-        {% set documentListText = 'Documents'|trans({}, 'icap_dropzone') %}
-        {% if drop.documents|length > 0 %} 
-           {{ dropzoneMacros.displayDocumentsList(drop, dropzone, 12, "complete", documentListText) }}
-        {% endif %}
-        <div class="show-during-add" style="display: none;">
-            <hr/>
-            <div class="container-inline"></div>
-        </div>
-        <div class='div-test'>
-            {% if allowedTypes|length <= 0 %}
-                <span class="text-danger">{{ 'No document type allowed'|trans({}, 'icap_dropzone') }}</span>
-            {% else %}
-
-                {% if 'url' in allowedTypes|keys %}
-                    {% include 'IcapDropzoneBundle:Document:documentForm.html.twig' with {'form':form_url, 'documentType': 'url'}%}
-                {% endif %}
-
-                {% if 'file' in allowedTypes|keys %}
-                    {% include 'IcapDropzoneBundle:Document:documentForm.html.twig' with {'form':form_file, 'documentType': 'file'}%} 
-                {% endif %}
-
-                {% if 'resource' in allowedTypes|keys %}
-                    {% include 'IcapDropzoneBundle:Document:documentForm.html.twig' with {'form':form_resource, 'documentType': 'resource'}%}
-                {% endif %}
-
-                {% if 'text' in allowedTypes|keys %}
-                    {% include 'IcapDropzoneBundle:Document:documentForm.html.twig' with {'form':form_text, 'documentType': 'text'}%}
-                {% endif %}
-            {% endif %}
-
-        </div>
-	    </div>
-	    </div>
-	    </div> {# END ROW #}
-    
         <div class="row">
         <div class='col-xs-12 col-md-12'>
 	        <hr/>
-
-        <form  id='dropzone_global_drop_form' class="form-horizontal" method="POST" action="{{ path('icap_dropzone_drop', {'resourceId': dropzone.id}) }}">
-            <div class="{% if form.vars.errors|length > 0 %}has-error{% endif %}">
-                {{ form_errors(form) }}
+	
+	        <form class="form-horizontal" method="POST" action="{{ path('icap_dropzone_drop', {'resourceId': dropzone.id}) }}">
+	            <div class="{% if form.vars.errors|length > 0 %}has-error{% endif %}">
+	                {{ form_errors(form) }}
+	            </div>
+	            <div class="row">
+	                <div class="col-md-12">
+	
+	                    <!-- Button trigger modal -->
+	                    <a data-toggle="modal" href="#saveModal" class="btn btn-primary pull-right disabled-during-add">{{ 'Save and finished'|trans({}, 'icap_dropzone') }}</a>
+	
+	                    <!-- Modal -->
+	                    <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	                        <div class="modal-dialog">
+	                            <div class="modal-content">
+	                                <div class="modal-header">
+	                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                                    <h4 class="modal-title">{{ 'Warning'|trans({}, 'icap_dropzone') }}</h4>
+	                                </div>
+	                                <div class="modal-body">
+	                                    {{ 'You are about to make your copy. This action is final. Are you sure you have done'|trans({}, 'icap_dropzone') }}
+	                                </div>
+	                                <div class="modal-footer">
+	                                    <a href="#" class="btn btn-default" data-dismiss="modal">{{ 'Cancel'|trans({}, 'icap_dropzone') }}</a>
+	
+	                                    <button type="submit" class="btn btn-primary pull-right">
+	                                        {{ 'Confirm and finished'|trans({}, 'icap_dropzone') }}
+	                                    </button>
+	                                </div>
+	                            </div><!-- /.modal-content -->
+	                        </div><!-- /.modal-dialog -->
+	                    </div><!-- /.modal -->
+	
+	                </div>
+	            </div>
+	            {{ form_end(form) }}
             </div>
-            <div class="row">
-                <div class="col-md-12">
-
-                    <!-- Button trigger modal -->
-                    <a id='dropzone_global_save_link' data-toggle="modal" href="#saveModal" class="btn btn-primary pull-right disabled-during-add">{{ 'Save and finished'|trans({}, 'icap_dropzone') }}</a>
-
-                    <!-- Modal -->
-                    <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title">{{ 'Warning'|trans({}, 'icap_dropzone') }}</h4>
-                                </div>
-                                <div class="modal-body">
-                                    {{ 'You are about to make your copy. This action is final. Are you sure you have done'|trans({}, 'icap_dropzone') }}
-
-                                    <div class='modal-warning text-danger' style="display:none">
-                                         <span class="text-danger glyphicon icon-warning-sign"></span>
-                                        {{ 'Warn, some field are not empty, they will not be saved until you click the Add button '|trans({},'icap_dropzone') }}
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <a href="#" class="btn btn-default" data-dismiss="modal">{{ 'Cancel'|trans({}, 'icap_dropzone') }}</a>
-
-                                    <button type="submit" class="btn btn-primary pull-right">
-                                        {{ 'Confirm and finished'|trans({}, 'icap_dropzone') }}
-                                    </button>
-                                </div>
-                            </div><!-- /.modal-content -->
-                        </div><!-- /.modal-dialog -->
-                    </div><!-- /.modal -->
-
-                </div>
-            </div>
-            {{ form_end(form) }}
-
+            </div> {# end contener #}
         <br/>
-    </div></div></div>
+    </div>
 
     <div id="picker-wrapper"></div>
 </div></section> 
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
+    {{ parent() }}}
 
     {% javascripts debug=false  output='vendor/twbs/bootstrap/js/change_me.js'
         '../vendor/twbs/bootstrap/js/modal.js'
@@ -224,15 +217,14 @@
                 var mimeType = nodes[_.keys(nodes)][2];
 
                 resourceNodeId = nodeId;
-                $('.dropzone_ressrouceSelected').show();
-                $('.dropzone_noRessourceSelected').hide();
+
                 $('.selected-resource').html(name);
-                $('#icap_dropzone_document_file_form_resource').val(resourceNodeId);
+                $('#icap_dropzone_document_file_form_document').val(resourceNodeId);
 
                 $('#add-document-sumbit').removeAttr('disabled');
                 $('#add-document-sumbit').trigger('click');
 
-                $('.add-document-pending').hide();
+                $('.add-document-pending').show();
             };
 
             var config = {% include 'ClarolineCoreBundle:Resource:init.html.twig' %};
@@ -243,11 +235,6 @@
                 callBack(nodes);
             }
             Claroline.ResourceManager.initialize(config);
-
-            // autosubmit input files.
-            $('#icap_dropzone_document_file_form_file').change(function(){
-              $(this).parents('form').submit();
-            });
 
             $('a.launch-inline').on('click', function (event) {
                 event.preventDefault();
@@ -281,43 +268,6 @@
                     })
                 ;
             });
-
-
-            $('#addRessourceButton').click(function(e)
-            {
-                e.preventDefault();
-                Claroline.ResourceManager.picker('open');
-                $('#modal-picker').unbind('hidden.bs.modal').on('hidden.bs.modal', function () {
-                    console.log('hidden modal');
-                    if (resourceNodeId == null) {
-                        console.log('hidden modal => cancel');
-                        //$('.cancel-inline').trigger('click');
-                    }
-                });
-            });
-
-
-
-            $('#dropzone_global_save_link').click(function()
-            {
-                // test if some text or data is not save before launch modal, in order to adapt message.
-                var fieldEmpty = true;
-                var text = $('#icap_dropzone_document_file_form_text').val();
-                var url = $('#icap_dropzone_document_file_form_url').val();
-                var file = $('#icap_dropzone_document_file_form_url').val();
-                if((text != '' && text != '<p></p>') || (url != '') || (file != '')) {
-                    fieldEmpty = false;
-                }
-
-                if(!fieldEmpty)
-                {
-                    $('.modal-warning').show();
-                }else {
-                     $('.modal-warning').hide();
-                }
-
-            })
         });
     </script>
 {% endblock %}
-

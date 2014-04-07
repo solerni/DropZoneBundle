@@ -85,17 +85,6 @@ class Drop {
      */
     protected $hiddenDirectory;
 
-
-    /**
-     * Indicate if the drop was close automaticaly ( when time is up by the dropzone option
-     * autoCloseOpenedDropsWhenTimeIsUp )
-     *
-     * @ORM\Column(name="auto_closed_drop",type="boolean", nullable=false,options={"default" = 0})
-     */
-    protected $autoClosedDrop = 0;
-
-
-
     public function __construct()
     {
         $this->documents = new ArrayCollection();
@@ -302,19 +291,6 @@ class Drop {
         return $nbFinishedCorrections;
     }
 
-    public function getHasDeniedCorrection()
-    {
-        $hasDeniedCorrection = false;
-        $corrections = $this->getCorrections();
-        foreach($corrections as $correction ) {
-            if($correction->getCorrectionDenied()) {
-                $hasDeniedCorrection = true;
-                break;
-            }
-        }
-        return $hasDeniedCorrection;
-    }
-
     /**
      * @return \DateTime|false
      */
@@ -322,46 +298,22 @@ class Drop {
     {
         /** @var Correction[] $corrections */
         $corrections = $this->getCorrections();
+        /** @var \DateTime $date */
+        /** @var Correction $firstCorrection */
+        $firstCorrection = $corrections->first();
 
         $date = false;
-        $validCorrectionFound = false;
-        foreach ($corrections as $correction) {
-            // if an ended  correction (with a endDate value) has not been found
-            if( $validCorrectionFound == false) {
-                // if its a valid correction.
-                if( $correction->getEndDate()!== NULL)  {
-                    // valid correction found, we change the step and keep the date.
-                    $date = $correction->getEndDate();
-                    $validCorrectionFound = true;
-                }
-            }else {
-                // at least a valid ended  correction has been found ( with an endDate)
-                // date comparaison if $correction endDate is not NULL;
-                if($correction->getEndDate() !== NULL) {
-                    if ($date->getTimestamp() < $correction->getEndDate()->getTimestamp()) {
-                        $date = $correction->getEndDate();
-                    }
-                }
-            }
 
+        if (false !== $firstCorrection) {
+            $date = $firstCorrection->getEndDate();
+        }
+
+        foreach ($corrections as $correction) {
+            if ($date->getTimestamp() < $correction->getEndDate()->getTimestamp()) {
+                $date = $correction->getEndDate();
+            }
         }
 
         return $date;
-    }
-
-    /**
-     * @param mixed $autoClosedDrop
-     */
-    public function setAutoClosedDrop($autoClosedDrop)
-    {
-        $this->autoClosedDrop = $autoClosedDrop;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAutoClosedDrop()
-    {
-        return $this->autoClosedDrop;
     }
 }

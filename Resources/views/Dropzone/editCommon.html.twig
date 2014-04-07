@@ -54,31 +54,14 @@
                 </div>
                 {{ form_row(form.expectedTotalCorrection, {'input_col_size': 'col-lg-4', 'label_col_size': '', 'attr': {'style': 'width: 60px;'}, 'label_attr': {'style': 'display: none;'}}) }}
             </div>
-            <div class="col-lg-offset-2 ">
-                {{ form_row(form.diplayCorrectionsToLearners, {'label_attr': { 'style': 'font-weight: normal;'}}) }}
-            </div>
-            <div class="col-lg-offset-2 ">
-                <div id='allow-correction-deny' class='col-lg-8' style="text-align: left;" >
-                    {{ form_row(form.allowCorrectionDeny, {'label_attr': { 'style': 'font-weight: normal;'}}) }}
-                </div>
-            </div>
         </div>
         <h4>{{ 'Rating'|trans({}, 'icap_dropzone') }}</h4>
 
         <div class="form-group">
             {{ form_row(form.displayNotationToLearners, {'input_col_size': 'col-lg-offset-2 col-lg-10', 'label_attr': {'class': 'control-label', 'style': 'font-weight: normal;'}}) }}
             {{ form_row(form.displayNotationMessageToLearners, {'input_col_size': 'col-lg-offset-2 col-lg-10', 'label_attr': {'class': 'control-label', 'style': 'font-weight: normal;'}}) }}
-            <div id='dropzone-message-part' class='col-lg-offset-3 col-lg-7' {% if dropzone.displayNotationMessageToLearners == false %} style="display:none" {% endif %} >
-                {{ form_label(form.successMessage,null,{'label': 'successMessage'|trans({},'icap_dropzone'), 'label_attr': {'class': 'control-label','style':'font-weight:normal;'}}) }}
-                {{ form_widget(form.successMessage, {'label_attr': {'class': 'control-label', 'style': 'font-weight: normal;'}}) }}
-                {{ form_errors(form.successMessage) }}
-                 {{ form_label(form.failMessage,null,{'label': 'failMessage'|trans({},'icap_dropzone'), 'label_attr': {'class': 'control-label','style':'font-weight:normal;'}}) }}
-                {{ form_widget(form.failMessage, {'label_attr': {'class': 'control-label', 'style': 'font-weight: normal;'}}) }}
-                {{ form_errors(form.failMessage) }}
-
-                {{ form_row(form.minimumScoreToPass, {'input_col_size': 'col-lg-4', 'label_col_size': 'col-lg-7', 'attr': {'style': 'width: 60px;'}, 'label_attr': {'class': 'control-label', 'style': 'font-weight: normal;'}}) }}
-            </div>
             <div class="col-lg-offset-3 col-lg-9">
+                {{ form_row(form.minimumScoreToPass, {'input_col_size': 'col-lg-4', 'label_col_size': 'col-lg-8', 'attr': {'style': 'width: 60px;'}, 'label_attr': {'class': 'control-label', 'style': 'font-weight: normal;'}}) }}
             </div>
         </div>
 
@@ -118,11 +101,6 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="row col-lg-offset-2">
-                    {{ form_row(form.autoCloseOpenedDropsWhenTimeIsUp,{'label_attr': {'class': 'control-label', 'style': 'font-weight: normal;'}}) }}
-                </div>
-            </div>
-            <div class="form-group">
                 <div class="row col-lg-offset-2 peer-review-options">
                     {{ form_row(form.startReview, {'label_attr': {'class': 'control-label', 'style': 'font-weight: normal;'}}) }}
                 </div>
@@ -132,7 +110,6 @@
                     {{ form_row(form.endReview, {'label_attr': {'class': 'control-label', 'style': 'font-weight: normal;'}}) }}
                 </div>
             </div>
-
         </div>
 
         <div class="btn-group pull-right">
@@ -150,28 +127,6 @@
             <strong>1/2</strong>
         </div>
     </div>
-    <div id="autoClosePrompt" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <a class="close" data-dismiss="modal">×</a>
-
-                    <h4>{{ 'People will not be able to drop anymore'|trans({},'icap_dropzone') }}</h4>
-                </div>
-                <div class="modal-body">
-
-
-                    <p>{{ 'Do you want to valid all drop started but not validated yet ?'|trans({},'icap_dropzone') }}</p>
-                </div>
-                <div class="modal-footer">
-                    <a id="acitvate_manualStateAutoClose" href="#" class="btn btn-success">{{ 'yes'|trans({},'icap_dropzone') }}</a>
-                    <a href="#" class="btn btn-default" data-dismiss="modal">{{ 'no'|trans({},'icap_dropzone') }}</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 {% endblock %}
 
 {% block javascripts %}
@@ -186,13 +141,7 @@
                 'html': true
             });
 
-            $("input:radio[name='icap_dropzone_common_form[manualState]']").click(function()
-            {
-                onManualStateChange($(this));
-            });
-
             $('#icap_dropzone_common_form_stayHere').val(0);
-            $('#icap_dropzone_common_form_autoCloseForManualStates').val(0);
             $('.save-button').on('click', function(event) {
                 event.preventDefault();
                 $('#icap_dropzone_common_form_stayHere').val(1);
@@ -206,19 +155,12 @@
                 enablePeerReviewOptions(true);
             });
 
-            manageSuccessFailMessagesVisibility( $('#icap_dropzone_common_form_displayNotationMessageToLearners'));
-            $('#icap_dropzone_common_form_displayNotationMessageToLearners').change(function()
-            {
-                manageSuccessFailMessagesVisibility($(this));
-            });
-            
-
             var enablePeerReviewOptions = function (peerReviewEnabled) {
                 if (peerReviewEnabled) {
                     $('.peer-review-options').show();
                     $('#icap_dropzone_common_form_manualState_2').parent().show();
                     $('#icap_dropzone_common_form_manualState_3').parent().show();
-                    $('#icap_dropzone_common_form_diplayCorrectionsToLearners').show();
+
                     $('.submit_button').html('{{ 'Save and continue'|trans({}, 'icap_dropzone') }}');
                 } else {
                     $('.peer-review-options').hide();
@@ -228,15 +170,14 @@
                     if ($('#icap_dropzone_common_form_expectedTotalCorrection').val() < 1 || $('#icap_dropzone_common_form_expectedTotalCorrection').val() > 10) {
                         $('#icap_dropzone_common_form_expectedTotalCorrection').val(3);
                     }
+
                     $('#icap_dropzone_common_form_endReview_date').val(null);
                     $('#icap_dropzone_common_form_endReview_time').val(null);
                     $('#icap_dropzone_common_form_startReview_date').val(null);
                     $('#icap_dropzone_common_form_startReview_time').val(null);
 
                     $('.submit_button').html('{{ 'Save and finished'|trans({}, 'icap_dropzone') }}');
-
                 }
-                manageCorrectionVisibility(peerReviewEnabled);
             }
 
             enablePeerReviewOptions({{ dropzone.peerReview }});
@@ -265,76 +206,7 @@
             } else {
                 datesPlanning();
             }
-
-            $('#icap_dropzone_common_form_diplayCorrectionsToLearners').click(function()
-            {
-                manageCorrectionDeny();
-            });
-            //manageCorrectionDeny(); // not needed anymore ( normaly called at line 194 => dependancy cascading of enablePeerReviewOptions method
         });
-
-        function manageCorrectionDeny()
-        {
-            // Set manageCorrectionDeny dependencies
-            // show option only if peerReview and CorrectionVisibility are Activated, set to false and desactivate if they are  not.
-            if($('#icap_dropzone_common_form_peerReview_1:checked').length == 1 
-                && $('#icap_dropzone_common_form_diplayCorrectionsToLearners').prop('checked')) {
-                $('#allow-correction-deny').parent().show();
-            } else {
-                $('#icap_dropzone_common_form_allowCorrectionDeny').prop('checked',false);
-                $('#allow-correction-deny').parent().hide();
-            } 
-  
-        }
-
-        function manageCorrectionVisibility(peerReviewEnabled)
-        {
-            // Set PeerReview dependency
-            // show option only if peerReview is Activated, set to false and desactivate if it is not.
-            // call manageCorrectionDeny to cascade dependencies .
-           /* if(peerReviewEnabled)
-            {
-                $('#icap_dropzone_common_form_diplayCorrectionsToLearners').parent().show();
-            }else {
-                 $('#icap_dropzone_common_form_diplayCorrectionsToLearners').prop('checked',false).parent().hide();
-            }*/
-            $('#icap_dropzone_common_form_diplayCorrectionsToLearners').parent().show();
-            manageCorrectionDeny();
-        }
-
-        function manageSuccessFailMessagesVisibility($cb)
-        {
-            var $div = $('#dropzone-message-part');
-            if($cb.prop('checked')) {
-                $div.fadeIn();
-            }else {
-                $div.fadeOut();
-            }
-            console.log($cb.prop('checked'));
-        }
-
-        /**
-         * When manual state has changed and involve that poeple will not be able to drop anymore, this will ask if
-         * you want to close opened drop. ( same as autoClose when time is up ).
-         *
-         * @param $radio (jquery selected item)
-         */
-        function onManualStateChange($radio)
-        {
-            var val = $radio.val();
-            $('#icap_dropzone_common_form_autoCloseForManualStates').val(0);
-            if(val == 'finished' || val == 'peerReview' ) {
-                $('#autoClosePrompt').modal('show'); // call the modal dialog.
-                $('#acitvate_manualStateAutoClose').unbind('click').click(function(e) {
-                    e.preventDefault();
-                    $('#icap_dropzone_common_form_autoCloseForManualStates').val(1);
-                    $('#autoClosePrompt').modal('hide');
-                });
-            }
-        }
-
-
-
     </script>
 {% endblock %}
 

@@ -1,7 +1,5 @@
 {% extends 'ClarolineCoreBundle:Workspace:layout.html.twig' %}
 
-{% import 'IcapDropzoneBundle::macros.html.twig' as dropzoneMacros %}
-
 {% block stylesheets %}
     {{ parent() }}
     {% stylesheets debug=false filter='lessphp'  output='bundles/icapdropzone/css/style.css'
@@ -9,6 +7,7 @@
     %}
         <link rel="stylesheet" href="{{ asset_url }}" screen="media" />
         <link href="{{ asset('bundles/icapdropzone/css/solerni.css') }}" type="text/css" rel="stylesheet"/>
+        
     {% endstylesheets %}
 {% endblock %}
 

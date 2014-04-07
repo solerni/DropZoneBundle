@@ -190,7 +190,7 @@ class DropRepository extends EntityRepository {
             ->join('drop.user', 'user')
             ->leftJoin('drop.documents', 'document')
             ->join('drop.corrections', 'correction')
-            ->orderBy('user.lastName, user.firstName')
+            ->orderBy('drop.reported desc, user.lastName, user.firstName')
             ->setParameter('dropIds', $dropIds)
             ->setParameter('dropzone', $dropzone)
             ->getQuery();
@@ -213,60 +213,11 @@ class DropRepository extends EntityRepository {
             ->join('drop.user', 'user')
             ->leftJoin('drop.documents', 'document')
             ->join('drop.corrections', 'correction')
-            ->orderBy('drop.dropDate')
-            ->setParameter('dropIds', $dropIds)
-            ->setParameter('dropzone', $dropzone)
-            ->getQuery();
-    }
-
-    public function getDropsFullyCorrectedOrderByReportAndDropDateQuery($dropzone)
-    {
-        $lines = $this->getDropIdsFullyCorrectedQuery($dropzone)->getResult();
-
-        $dropIds = array();
-        foreach($lines as $line) {
-            $dropIds[] = $line['did'];
-        }
-
-        return $this
-            ->createQueryBuilder('drop')
-            ->select('drop, document, correction, user')
-            ->andWhere('drop.id IN (:dropIds)')
-            ->andWhere('drop.dropzone = :dropzone')
-            ->join('drop.user', 'user')
-            ->leftJoin('drop.documents', 'document')
-            ->join('drop.corrections', 'correction')
             ->orderBy('drop.reported desc, drop.dropDate')
             ->setParameter('dropIds', $dropIds)
             ->setParameter('dropzone', $dropzone)
             ->getQuery();
     }
-
-    public function getDropsFullyCorrectedReportedQuery($dropzone)
-    {
-        $lines = $this->getDropIdsFullyCorrectedQuery($dropzone)->getResult();
-
-        $dropIds = array();
-        foreach($lines as $line) {
-            $dropIds[] = $line['did'];
-        }
-
-        return $this
-            ->createQueryBuilder('drop')
-            ->select('drop, document, correction, user')
-            ->andWhere('drop.id IN (:dropIds)')
-            ->andWhere('drop.dropzone = :dropzone')
-            ->andWhere('drop.reported = true or correction.correctionDenied = true ')
-            ->join('drop.user', 'user')
-            ->leftJoin('drop.documents', 'document')
-            ->join('drop.corrections', 'correction')
-            ->orderBy('drop.reported desc, correction.correctionDenied, drop.dropDate')
-            ->setParameter('dropIds', $dropIds)
-            ->setParameter('dropzone', $dropzone)
-            ->getQuery();
-    }
-
-
 
     public function getDropsAwaitingCorrectionQuery($dropzone)
     {
@@ -297,17 +248,6 @@ class DropRepository extends EntityRepository {
         return $qb->getQuery();
     }
 
-    public function getDropIdsByUser($dropzoneId,$userId)
-    {
-        $qb = $this->createQueryBuilder('drop')
-            ->select('drop.id')
-            ->andWhere('drop.dropzone = :dropzone')
-            ->andWhere('drop.user = :user')
-            ->setParameter('dropzone',$dropzoneId)
-            ->setParameter('user',$userId);
-        return $qb->getQuery()->getResult()[0];
-    }
-
     public function getDropAndCorrectionsAndDocumentsAndUser($dropzone, $dropId)
     {
         $qb = $this->createQueryBuilder('drop')
@@ -321,23 +261,6 @@ class DropRepository extends EntityRepository {
             ->setParameter('dropId', $dropId);
 
         return $qb->getQuery()->getResult()[0];
-    }
-
-    public function getDropAndValidEndedCorrectionsAndDocumentsByUser($dropzone,$dropId,$userId)
-    {
-
-        $qb = $this->createQueryBuilder('drop')
-            ->select('drop, document, correction, user')
-            ->andWhere('drop.dropzone = :dropzone')
-            ->andWhere('drop.id = :dropId')
-            ->andWhere('correction.finished = 1')
-            ->join('drop.user', 'user')
-            ->leftJoin('drop.documents', 'document')
-            ->leftJoin('drop.corrections', 'correction')
-            ->setParameter('dropzone', $dropzone)
-            ->setParameter('dropId', $dropId);
-
-        return $qb->getQuery()->getResult();
     }
 
     public function getLastNumber($dropzone)
@@ -355,21 +278,5 @@ class DropRepository extends EntityRepository {
         }else {
             return $result[0][1];
         }
-    }
-
-    /**
-     *  Close unclosed drops in a dropzone
-     * @param $dropzoneId
-     */
-    public function closeUnTerminatedDropsByDropzone($dropzoneId)
-    {
-        $qb = $this->createQueryBuilder('drop')
-            ->update('Icap\\DropzoneBundle\\Entity\\Drop','d')
-            ->set('d.autoClosedDrop',1)
-            ->set('d.finished',1)
-            ->andWhere('d.dropzone = :dropzoneId')
-            ->andWhere('d.finished = 0')
-            ->setParameter('dropzoneId',$dropzoneId);
-        $qb->getQuery()->execute();
     }
 }

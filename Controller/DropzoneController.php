@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by : Vincent SAISSET
+ * Date: 22/08/13
+ * Time: 09:30
+ */
+
 namespace Icap\DropzoneBundle\Controller;
 
 use Claroline\CoreBundle\Entity\User;
@@ -6,7 +12,6 @@ use Claroline\CoreBundle\Event\Log\LogResourceReadEvent;
 use Claroline\CoreBundle\Event\Log\LogResourceUpdateEvent;
 use Icap\DropzoneBundle\Entity\Dropzone;
 use Icap\DropzoneBundle\Event\Log\LogDropzoneConfigureEvent;
-use Icap\DropzoneBundle\Event\Log\LogDropzoneManualStateChangedEvent;
 use Icap\DropzoneBundle\Form\DropzoneCommonType;
 use Icap\DropzoneBundle\Form\DropzoneCriteriaType;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
@@ -44,18 +49,12 @@ class DropzoneController extends DropzoneBaseController
         $form = $this->createForm(new DropzoneCommonType(), $dropzone);
 
         if ($this->getRequest()->isMethod('POST')) {
-            // see if manual plannification option has changed.
-            $oldManualPlanning = $dropzone->getManualPlanning();
-            $oldManualPlanningOption = $dropzone->getManualState();
-
-            $oldEndDropDate = $dropzone->getEndAllowDrop();
-
             $form->handleRequest($this->getRequest());
 
             /** @var Dropzone $dropzone */
             $dropzone = $form->getData();
 
-            if (!$dropzone->getPeerReview( )and $dropzone->getManualState() == 'peerReview') {
+            if (!$dropzone->getPeerReview() and $dropzone->getManualState() == 'peerReview') {
                 $dropzone->setManualState('notStarted');
             }
             if ($dropzone->getEditionState() < 2) {
@@ -118,35 +117,11 @@ class DropzoneController extends DropzoneBaseController
             }
 
             if ($form->isValid()) {
-                //getting the dropzoneManager
-                $dropzoneManager = $this->get('icap.manager.dropzone_manager');
-
                 if ($dropzone->getPeerReview() != true) {
                     $dropzone->setExpectedTotalCorrection(1);
                     if ($dropzone->getManualState() == 'peerReview') {
                         $dropzone->setManualState('notStarted');
                     }
-                }
-
-                $manualStateChanged = false;
-                $newManualState = null;
-                if( $dropzone->getManualPlanning() == true)
-                {
-
-                    if($oldManualPlanning == false || $oldManualPlanningOption != $dropzone->getManualState())
-                    {
-                        $manualStateChanged = true;
-                        $newManualState = $dropzone->getManualState();
-                    }
-                    // option auto Close unterminated drops
-                    if($form->get('autoCloseForManualStates')->getData() == 1) {
-                        $dropzoneManager->closeDropzoneOpenedDrops($dropzone,true);
-                    }
-
-                }else {
-                   if($oldEndDropDate != $dropzone->getEndAllowDrop()){
-                       $dropzone->setAutoCloseState(Dropzone::AUTO_CLOSED_STATE_WAITING);
-                   }
                 }
 
                 $em = $this->getDoctrine()->getManager();
@@ -158,18 +133,6 @@ class DropzoneController extends DropzoneBaseController
                 $em->persist($dropzone);
                 $em->flush();
 
-
-                // check if manual state has changed
-                if($manualStateChanged)
-                {
-                   // send notification.
-
-                    $usersIds = $dropzoneManager->getDropzoneUsersIds($dropzone);
-                    $event = new LogDropzoneManualStateChangedEvent($dropzone,$newManualState,$usersIds);
-                    $this->get('event_dispatcher')->dispatch('log', $event);
-
-
-                }
                 $event = new LogDropzoneConfigureEvent($dropzone, $changeSet);
                 $this->dispatch($event);
 
@@ -347,25 +310,19 @@ class DropzoneController extends DropzoneBaseController
         $em = $this->getDoctrine()->getManager();
         $dropRepo = $em->getRepository('IcapDropzoneBundle:Drop');
         $drop = $dropRepo->findOneBy(array('dropzone' => $dropzone, 'user' => $user));
-        $dropzoneManager = $this->get('icap.manager.dropzone_manager');
-        // check if endAllowDrop is past and close all unvalidated
-        // drops if autoclose options is activated.
-        if($dropzone->getAutoCloseState() == Dropzone::AUTO_CLOSED_STATE_WAITING) {
-            $dropzoneManager->closeDropzoneOpenedDrops($dropzone);
 
-        }
-
-        $nbCorrections = $em
+        $nbCorrections = $this
+            ->getDoctrine()
+            ->getManager()
             ->getRepository('IcapDropzoneBundle:Correction')
             ->countFinished($dropzone, $user);
-        $hasCopyToCorrect = $em
+        $hasCopyToCorrect = $this
+            ->getDoctrine()
+            ->getManager()
             ->getRepository('IcapDropzoneBundle:Drop')
             ->hasCopyToCorrect($dropzone, $user);
         $hasUnfinishedCorrection = $em->getRepository('IcapDropzoneBundle:Correction')->getNotFinished($dropzone, $user) != null;
 
-
-        // get progression of the evaluation ( current state, all states available and needed infos to the view).
-        $dropzoneProgress = $dropzoneManager->getDrozponeProgress($dropzone,$drop,$nbCorrections);
         return array(
             'workspace' => $dropzone->getResourceNode()->getWorkspace(),
             '_resource' => $dropzone,
@@ -374,10 +331,6 @@ class DropzoneController extends DropzoneBaseController
             'nbCorrections' => $nbCorrections,
             'hasCopyToCorrect' => $hasCopyToCorrect,
             'hasUnfinishedCorrection' => $hasUnfinishedCorrection,
-            'dropzoneProgress' => $dropzoneProgress,
         );
     }
-
-
-
 }

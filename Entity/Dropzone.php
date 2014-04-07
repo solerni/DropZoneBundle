@@ -18,17 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="icap__dropzonebundle_dropzone")
  */
-class Dropzone extends AbstractResource
-{
-
-    const MANUAL_STATE_NOT_STARTED = "notStarted";
-    const MANUAL_STATE_PEER_REVIEW = "peerReview";
-    const MANUAL_STATE_ALLOW_DROP = "allowDrop";
-    const MANUAL_STATE_ALLOW_DROP_AND_PEER_REVIEW = "allowDropAndPeerReview";
-    const MANUAL_STATE_FINISHED = "finished";
-
-    const AUTO_CLOSED_STATE_WAITING = "waiting";
-    const AUTO_CLOSED_STATE_CLOSED ="autoClosed";
+class Dropzone extends AbstractResource {
 
     /**
      * 1 = common
@@ -39,53 +29,30 @@ class Dropzone extends AbstractResource
      * @ORM\Column(name="edition_state", type="smallint", nullable=false)
      */
     protected $editionState = 1;
-
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected $instruction = null;
-
-
-    /**
-     * @ORM\Column(name="correction_instruction",type="text", nullable=true)
-     */
-    protected $correctionInstruction = null;
-
-    /**
-     * @ORM\Column(name="success_message",type="text", nullable=true)
-     */
-    protected $successMessage = null;
-
-    /**
-     * @ORM\Column(name="fail_message",type="text", nullable=true)
-     */
-    protected $failMessage = null;
-
     /**
      * @ORM\Column(name="allow_workspace_resource", type="boolean", nullable=false)
      */
     protected $allowWorkspaceResource = false;
-
     /**
      * @ORM\Column(name="allow_upload", type="boolean", nullable=false)
      */
     protected $allowUpload = true;
-
     /**
      * @ORM\Column(name="allow_url", type="boolean", nullable=false)
      */
     protected $allowUrl = false;
-
     /**
      * @ORM\Column(name="allow_rich_text", type="boolean", nullable=false)
      */
     protected $allowRichText = false;
-
     /**
      * @ORM\Column(name="peer_review", type="boolean", nullable=false)
      */
     protected $peerReview = false;
-
     /**
      * @ORM\Column(name="expected_total_correction", type="smallint", nullable=false)
      * @Assert\Range(
@@ -94,17 +61,14 @@ class Dropzone extends AbstractResource
      * )
      */
     protected $expectedTotalCorrection = 3;
-
     /**
      * @ORM\Column(name="display_notation_to_learners", type="boolean", nullable=false)
      */
     protected $displayNotationToLearners = true;
-
     /**
      * @ORM\Column(name="display_notation_message_to_learners", type="boolean", nullable=false)
      */
     protected $displayNotationMessageToLearners = false;
-
     /**
      * @ORM\Column(name="minimum_score_to_pass", type="float", nullable=false)
      * @Assert\Range(
@@ -113,68 +77,40 @@ class Dropzone extends AbstractResource
      * )
      */
     protected $minimumScoreToPass = 10;
-
     /**
      * @ORM\Column(name="manual_planning", type="boolean", nullable=false)
      */
     protected $manualPlanning = true;
-
     /**
      * @ORM\Column(name="manual_state", type="string", nullable=false)
      */
     protected $manualState = 'notStarted';
-
     /**
      * @ORM\Column(name="start_allow_drop", type="datetime", nullable=true)
      */
     protected $startAllowDrop = null;
-
     /**
      * @ORM\Column(name="end_allow_drop", type="datetime", nullable=true)
      */
     protected $endAllowDrop = null;
-
     /**
      * @ORM\Column(name="start_review", type="datetime", nullable=true)
      */
     protected $startReview = null;
-
     /**
      * @ORM\Column(name="end_review", type="datetime", nullable=true)
      */
     protected $endReview = null;
-
     /**
      * @ORM\Column(name="allow_comment_in_correction", type="boolean", nullable=false)
      */
     protected $allowCommentInCorrection = false;
-
-    /**
-     * Defini si oui ou non les corrections faites par les pairs sont visibles par le possesseur de la copie corrigé.
-     * les corrections devront cependant rester anonyme.
-     *
-     * @var bool
-     * @ORM\Column(name="diplay_corrections_to_learners",type="boolean",nullable=false)
-     *
-     */
-    protected $diplayCorrectionsToLearners = false;
-
-    /**
-     * Depend on diplayCorrectionsToLearners, need diplayCorrectionsToLearners to be true in order to work.
-     * Allow users to flag that they are not agree with the correction.
-     *
-     * @var bool
-     * @ORM\Column(name="allow_correction_deny",type="boolean",nullable=false)
-     */
-    protected $allowCorrectionDeny = false;
-
     /**
      * @ORM\Column(name="total_criteria_column", type="smallint", nullable=false)
      * @Assert\LessThanOrEqual(value=10)
      * @Assert\GreaterThanOrEqual(value=3)
      */
     protected $totalCriteriaColumn = 4;
-
     /**
      * @var ArrayCollection
      *
@@ -186,7 +122,6 @@ class Dropzone extends AbstractResource
      * )
      */
     protected $drops;
-
     /**
      * @var ArrayCollection
      *
@@ -198,24 +133,6 @@ class Dropzone extends AbstractResource
      * )
      */
     protected $peerReviewCriteria;
-
-    /**
-     * if true,
-     * when time is up, all drop not already closed will be closed and flaged as uncompletedDrop.
-     * That will allow them to access the next step ( correction by users or admins ).
-     *
-     * @var bool
-     * @ORM\Column(name="auto_close_opened_drops_when_time_is_up",type="boolean",nullable=false,options={"default" = 0})
-     */
-    protected $autoCloseOpenedDropsWhenTimeIsUp = 0;
-
-    /**
-     * @var String
-     * @ORM\Column(name="auto_close_state",type="string",nullable=false,options={"default" = "waiting"})
-     */
-    protected $autoCloseState = self::AUTO_CLOSED_STATE_WAITING;
-
-
 
     /**
      * @ORM\OneToOne(
@@ -393,54 +310,6 @@ class Dropzone extends AbstractResource
     }
 
     /**
-     * @return text
-     */
-    public function getCorrectionInstruction()
-    {
-        return $this->correctionInstruction;
-    }
-
-    /**
-     * @param text $instruction
-     */
-    public function setCorrectionInstruction($instruction)
-    {
-        $this->correctionInstruction = $instruction;
-    }
-
-    /**
-     * @return text
-     */
-    public function getSuccessMessage()
-    {
-        return $this->successMessage;
-    }
-
-    /**
-     * @param text $message
-     */
-    public function setSuccessMessage($message)
-    {
-        $this->successMessage = $message;
-    }
-
-    /**
-     * @return text
-     */
-    public function getFailMessage()
-    {
-        return $this->failMessage;
-    }
-
-    /**
-     * @param text $message
-     */
-    public function setFailMessage($message)
-    {
-        $this->failMessage = $message;
-    }
-
-    /**
      * @return mixed
      */
     public function getManualPlanning()
@@ -469,16 +338,7 @@ class Dropzone extends AbstractResource
      */
     public function setManualState($manualState)
     {
-        $ms_tab_values = array(
-            self::MANUAL_STATE_NOT_STARTED,
-            self::MANUAL_STATE_PEER_REVIEW,
-            self::MANUAL_STATE_ALLOW_DROP,
-            self::MANUAL_STATE_ALLOW_DROP_AND_PEER_REVIEW,
-            self::MANUAL_STATE_FINISHED);
-        if (array_search($manualState, $ms_tab_values) !== false) {
-            $this->manualState = $manualState;
-        }
-
+        $this->manualState = $manualState;
     }
 
     /**
@@ -575,37 +435,6 @@ class Dropzone extends AbstractResource
     public function setDisplayNotationToLearners($displayNotationToLearners)
     {
         $this->displayNotationToLearners = $displayNotationToLearners;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getDiplayCorrectionsToLearners()
-    {
-        return $this->diplayCorrectionsToLearners;
-    }
-
-    /**
-     * @param bool $displayNotationToLearners
-     */
-    public function setDiplayCorrectionsToLearners($diplayCorrectionsToLearners)
-    {
-        $this->diplayCorrectionsToLearners = $diplayCorrectionsToLearners;
-    }
-
-    /**
-     * @return bool
-     **/
-    public function getAllowCorrectionDeny()
-    {
-        return $this->allowCorrectionDeny;
-    }
-
-
-    public function setAllowCorrectionDeny($allowCorrectionDeny)
-    {
-        $this->allowCorrectionDeny = $allowCorrectionDeny;
     }
 
     /**
@@ -716,13 +545,7 @@ class Dropzone extends AbstractResource
         } else {
             $now = new \DateTime();
 
-            $finished = $allowDropEnd = $now->getTimestamp() > $this->endAllowDrop->getTimestamp();
-
-            if ($this->isPeerReview()) {
-                $finished = $allowDropEnd && $now->getTimestamp() > $this->endReview->getTimestamp();
-            }
-
-            return $finished;
+            return $now->getTimestamp() > $this->endAllowDrop->getTimestamp() and $now->getTimestamp() > $this->endReview->getTimestamp();
         }
     }
 
@@ -732,7 +555,7 @@ class Dropzone extends AbstractResource
             return -1;
         }
         $now = new \DateTime();
-        if ($now->getTimestamp() < $reference->getTimestamp()) {
+        if ($now->getTimestamp() <$reference->getTimestamp()) {
             return $reference->getTimestamp() - $now->getTimestamp();
         } else {
             return 0;
@@ -785,41 +608,4 @@ class Dropzone extends AbstractResource
 
         return $this;
     }
-
-    /**
-     * @param boolean $autoCloseOpenedDropsWhenTimeIsUp
-     */
-    public function setAutoCloseOpenedDropsWhenTimeIsUp($autoCloseOpenedDropsWhenTimeIsUp)
-    {
-        $this->autoCloseOpenedDropsWhenTimeIsUp = $autoCloseOpenedDropsWhenTimeIsUp;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getAutoCloseOpenedDropsWhenTimeIsUp()
-    {
-        return $this->autoCloseOpenedDropsWhenTimeIsUp;
-    }
-
-    /**
-     * Param that indicate if all drop have already been auto closed or not.
-     * @param String $autoCloseState
-     */
-    public function setAutoCloseState($autoCloseState)
-    {
-        $authorizedValues = array(self::AUTO_CLOSED_STATE_CLOSED,self::AUTO_CLOSED_STATE_WAITING);
-        if(in_array($autoCloseState,$authorizedValues)) {
-            $this->autoCloseState = $autoCloseState;
-        }
-    }
-
-    /**
-     * @return String
-     */
-    public function getAutoCloseState()
-    {
-        return $this->autoCloseState;
-    }
-
 }

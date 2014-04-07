@@ -52,13 +52,10 @@ h3 {
 
 .drop__annoncement__badge{
 	background-color: #EEEEEF;
+	height: 60px;
 	margin-top: 30px;
 	padding: 10px 10px 10px 100px;
 	font-size: 1.2em;
-}
-.drop__annoncement__badge .bold{
-    font-weight: bold;
-    font-size: 1.2em;
 }
 .drop__annoncement__badge:before{
 	content: "";
@@ -67,7 +64,7 @@ h3 {
     position: absolute;
     width: 35px;
     height: 35px;
-	background-image: url('../../orangetheme/images/sprites_solerni.png');
+	background-image: url('../images/sprites_solerni.png');
 	background-position: 0 0;
 }
 .collapse__div__instruction{

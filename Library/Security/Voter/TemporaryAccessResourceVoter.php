@@ -37,21 +37,22 @@ class TemporaryAccessResourceVoter implements VoterInterface
 
     public function vote(TokenInterface $token, $object, array $attributes)
     {
-
         if ($object instanceof ResourceCollection) {
-            $granted = false;
+            $granted = true;
 
             $user = null;
             if ($token->getUser() instanceof User) {
                 $user= $token->getUser();
             }
 
-            if ($this->manager->hasTemporaryAccessOnSomeResources($user)) {
+            if ($this->manager->hasTemporaryAccessOnSomeResources($user) === false) {
+                $granted = false;
+            } else {
                 foreach($attributes as $attribute) {
                     if ($this->supportsAttribute($attribute) && $this->supportsClass($object)) {
                         foreach ($object->getResources() as $resource) {
-                            if ($this->manager->hasTemporaryAccess($resource, $user) ) {
-                                $granted = true;
+                            if ($this->manager->hasTemporaryAccess($resource, $user) === false) {
+                                $granted = false;
                                 break;
                             }
                         }
@@ -61,8 +62,6 @@ class TemporaryAccessResourceVoter implements VoterInterface
 
             if ($granted) {
                 return VoterInterface::ACCESS_GRANTED;
-            }else{
-                return VoterInterface::ACCESS_DENIED;
             }
         }
 
