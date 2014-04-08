@@ -43,7 +43,7 @@ h2{
 	font-weight: bold;
 	color: #000;
 }
-h2.FAQ a, h2.FAQ a:hover{
+a.FAQ, a.FAQ:hover{
 	color:#FF004F;
 	font-weight: normal;
 	position: absolute;

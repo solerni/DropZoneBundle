@@ -30,13 +30,27 @@
     
         {% if drop is not null and drop.finished == false %} {# Cas : case préalablement cochée #}
                          
-            <a href='http://solerni.localhost/mooc/icapdropzonebundle/1/drop' > lien </a> 
-            
+            <a href='http://solerni.localhost/mooc/icapdropzonebundle/1/drop' > lien étape 1 </a> 
+           {#  <script>
+			 /*<![CDATA[*/
+			 
+			  {% if allowToCompose == 1 and nbQuestion > 0 %}
+			    window.location.href = '{{ path('ujm_exercise_paper', { 'id': entity.id }) }}';
+			  {% else %}
+			    window.location.href = '{{ path('ujm_paper_list', { 'exoID': entity.id }) }}';
+			  {% endif %}
+			 
+			/*]]>*/
+			</script> #}
+        
+        {% elseif drop is not null and drop.finished == true %} {# Cas : dossier terminé #}    
+                         
+            <a href='#' > lien étape 2 </a>              
                          
         {% else %} {# Cas : on arrive pour la première fois #}
           
 	    
-	        <h2>{{ 'welcome'|trans({}, 'solerni') }}<span class='FAQ'><a href='#'>FAQ</a></span></h2>
+	        <h2>{{ 'welcome'|trans({}, 'solerni') }}<span class='FAQ'><a href='#' class='FAQ'>FAQ</a></span></h2>
 	        
 	        <hr/>
 	        {% if dropzone.instruction is not null %}
