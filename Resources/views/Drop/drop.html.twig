@@ -34,18 +34,18 @@
             <span class='bold'>&laquo;Travail et digital&raquo;</span>
         </div>
 
-        <h2>{{ 'welcome_constit1'|trans({}, 'solerni') }}- {{ 'step1'|trans({}, 'solerni') }}</h2>      
+        <h2>{{ 'welcome_constit1'|trans({}, 'solerni') }}- {{ 'step1'|trans({}, 'solerni') }}<span class='FAQ'><a href='#' class='FAQ'>FAQ</a></span></h2>      
             
             <hr/>
             <div class="row">
             <div class='col-xs-12 col-md-12'>
-	            <div class='col-xs-9 col-md-9'>
+	            <div class='col-xs-8 col-md-8'>
 	            
 		            {{ 'date_limite'|trans({}, 'solerni') }} {{  dropzone.endAllowDrop|date('d/m/Y') }}  
 		            
 		            <div class='collapse__div'>
-		                <h3 class='collapse__h2'>Rappel des instructions pour constituer mon dossier</h3>
-		                <div  class='collapse__div__instruction'>{% if dropzone.instruction != null %}{{ dropzone.instruction|raw }}{% endif %}</div>
+		                <div class='collapse__div__title'>Rappel des instructions pour constituer mon dossier</div>
+		                <div class='collapse__div__instruction'>{% if dropzone.instruction != null %}{{ dropzone.instruction|raw }}{% endif %}</div>
 		            </div>     
 		            
 		            {#<div class="btn-group">
@@ -65,7 +65,7 @@
 		         
 		            $( document ).ready(function() {
 		              $(".collapse__div").collapse({
-		                query: 'h3'
+		                query: '.collapse__div__title'
 		              });
 		            });
 		            
@@ -114,7 +114,7 @@
 		        </div>
 	
 	        </div>
-	        <div class='col-xs-3 col-md-3'>
+	        <div class='col-xs-4 col-md-4'>
 	        
 	        
 	         <div class='dropForum'>
