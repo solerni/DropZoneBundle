@@ -8,11 +8,6 @@
     font-weight: bold;
 }
 
-/* hide progression */
-.bg-color-primary {
-	display:none;
-}
-
 /* reset value */
 .container{
 	width: auto;
@@ -62,10 +57,40 @@ h3 {
 	font-weight: bold;
 	text-transform: uppercase;
 }
-.btn-gris:hover, .btn-gris:focus, .btn-gris:active, .btn-gris.active, .open .dropdown-toggle.btn-gris {
+.btn-gris{
 	background-color: #999999;
 	border-color: #999999;
 }
+.btn-gris:hover, .btn-gris:focus, .btn-gris:active, .btn-gris.active, .open .dropdown-toggle.btn-gris {
+	background-color: #888686;
+	border-color: #888686;
+}
+.dropdown-fixed a, .dropdown-fixed > .dropdown-menu{
+	width: 250px;
+}
+.dropdown-gris-menu{
+	background-color: #999999;	
+}
+.dropdown-gris-menu > li > a{
+	color:#FFFFFF;
+	border-bottom: 1px solid #FFFFFF;
+}
+.dropdown-gris-menu > li:last-child > a{
+	border:0 none;	
+}
+.dropdown-gris-menu > li > a:hover{
+	background-color: #888686;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 .drop__annoncement__badge{
@@ -88,6 +113,11 @@ h3 {
 	background-image: url('../../orangetheme/images/sprites_solerni.png');
 	background-position: 0 -583px;
 }
+
+.date__end{
+	font-weight:bold;
+}
+
 .collapse__div__title{
 	margin-top: 10px;
 }
@@ -131,7 +161,7 @@ h3 {
 	font-weight: bold;
 }
 .dropForum__content{
-	padding: 5px;
+	padding: 7px;
 }
 .dropForum__button{
 	text-align: center;
