@@ -36,7 +36,7 @@
         {% else %} {# Cas : on arrive pour la première fois #}
           
 	    
-	        <h2>{{ 'welcome'|trans({}, 'solerni') }}</h2>
+	        <h2>{{ 'welcome'|trans({}, 'solerni') }}<span class='FAQ'><a href='#'>FAQ</a></span></h2>
 	        
 	        <hr/>
 	        {% if dropzone.instruction is not null %}
@@ -47,10 +47,18 @@
 	        
 	        <hr/>
 	        
-	        <input type='checkbox' value='go' name='letsgo' id='letsgo'/><label for='letsgo' >{{ 'checkboxStart'|trans({}, 'solerni') }}</label>
+		    
+		    <label for='letsgo' >
+		      <input type='checkbox' value='go' name='letsgo' id='letsgo'/>
+		      {{ 'checkboxStart'|trans({}, 'solerni') }}
+		    </label>
+		    
+		    <div class='row'>
+		      <a href="{{ path('icap_dropzone_drop', {'resourceId': dropzone.id}) }}" class="btn btn-primary pull-right disabled drop__buttonStart">{{ 'buttonStart'|trans({}, 'solerni') }}</a>
+		    </div>   
+		    
+  
 	        
-	        <a href="{{ path('icap_dropzone_drop', {'resourceId': dropzone.id}) }}" class="btn btn-primary pull-right disabled drop__buttonStart">{{ 'buttonStart'|trans({}, 'solerni') }}</a>
-        
         <script>
         $(document).on('ready', function() {
         	$('#letsgo').change(function(){
