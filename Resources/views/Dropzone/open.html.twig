@@ -19,10 +19,11 @@
         
 </div>
 <div class='col-xs-9 col-md-9'>
-    <div class="container container-dropzone">
+    <div class="container container-dropzone slrn-container-dropzone">
     
         {{ macros.flashBox() }}
         
+        {# intégrer un comportement dynamique ou pseudo-dynamique pour injecter le bon nom de badge #}
         <div class='drop__annoncement__badge' style='background-image:url()'>
             Badge de compétence en cours d'évalution<br/>
             <span class='bold'>&laquo;Travail et digital&raquo;</span>
@@ -38,8 +39,48 @@
         
         {% elseif drop is not null and drop.finished == true %} {# Cas : dossier terminé #}    
                          
-            <a href='#' > lien étape 2 </a>              
-                         
+            <h2>{{ 'evaluation_by_peers'|trans({}, 'solerni') }}<span class='FAQ'><a href='{{ path( 'solerni_static_page', { 'name': 'cms_faq' } ) }}' class='FAQ'>FAQ</a></span></h2>
+            <hr/>
+            <p class="slrn-dropzone-text">Votre dossier de preuves a bien été envoyé le {{ drop.getDropDate()|date("d/m/Y") }} pour évaluation par vos pairs.</p>
+             <div>
+                {#{% set nbDocument = drop.documents|length %}
+                {{ 'nbDocumentsInThisEvaluation'|transchoice(drop.documents|length, {}, 'icap_dropzone') }}#}
+                <ul>
+                    {% for document in drop.documents %}
+                        <li>
+                            {% include 'IcapDropzoneBundle:Document:simpleShowDocument.html.twig' %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+             <hr/>
+             <div>
+                 {% if dropzone.peerReview %}
+                    {% set expectedCorrections = dropzone.expectedTotalCorrection - nbCorrections %}
+                    {% set buttonDisabled = false %}
+                {% endif %}
+                {% if dropzone.expectedTotalCorrection == expectedCorrections %}
+                    {% set buttonText = 'start_corrections'|trans({}, 'solerni') %}
+                    <p>Vous devez à votre tour <span class="slrn-bold">évaluer 3 dossiers afin d'obtenir votre évaluation finale</span>. Vous avez jusqu'au {{ dropzone.getEndReview()|date("d/m/Y") }} pour corriger ces dossiers.</p>
+                {% endif %}
+                {% if dropzone.expectedTotalCorrection > expectedCorrections %}
+                    {% set buttonText = 'continue_corrections'|trans({}, 'solerni') %}
+                    <p>Vous devez encore <span class="slrn-bold">évaluer {{ expectedCorrections }} dossiers afin d'obtenir votre évaluation finale</span>. Vous avez jusqu'au pour corriger ces dossiers.</p>
+                {% endif %}
+             </div>
+             <div>
+                {% if hasCopyToCorrect == false %}
+                 <div class="slrn-no-copies">
+                     {% set buttonDisabled = true %}
+                     <p>Désolé, aucune copie n'est disponible pour le moment.<br />
+                     Merci de vous reconnecter d'ici 24h, le temps que d'autres étudiants aient rendu leur copie.</p>
+                     <p>A très bientôt</p>
+                 </div>
+                {% endif %}
+                 
+                 
+                 <a href="{{ path('icap_dropzone_correct', {'resourceId': dropzone.id}) }}" class="btn btn-primary pull-right{% if buttonDisabled == true %} disabled{% endif %}">{{ buttonText }}</a>
+             </div>
         {% else %} {# Cas : on arrive pour la première fois #}
           
 	    

@@ -4,6 +4,10 @@
 	padding-top:0;
 }
 
+.slrn-bold {
+    font-weight: bold;
+}
+
 /* hide progression */
 .bg-color-primary {
 	display:none;
@@ -46,7 +50,7 @@ h2{
 a.FAQ, a.FAQ:hover{
 	color:#FF004F;
 	font-weight: normal;
-	position: absolute;
+	float: right;
 	font-size: 0.7em;
 	right: 0;
 	line-height: 1.7em;
@@ -132,4 +136,21 @@ h3 {
 .dropForum__button{
 	text-align: center;
 	
+}
+
+.slrn-no-copies {
+    background-color: #EEEEEF;
+    padding: 1em;
+    padding-left: 4.2em;
+    margin: 1.5em 0;
+    position: relative;
+}
+
+.slrn-no-copies:before {
+    content: "";
+    background: transparent url(../../orangetheme/images/sprites_solerni.png) no-repeat 0 -657px scroll;
+    width: 31px;
+    height: 66px;
+    position: absolute;
+    left: 1em;
 }

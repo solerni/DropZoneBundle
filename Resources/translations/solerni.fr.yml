@@ -24,3 +24,6 @@ welcome: 'Bienvenue dans votre espace de travail'
 welcome_constit1: 'Constituez votre dosssier de preuves'
 
 yourFiles: 'Votre dossier de preuves : '
+evaluation_by_peers: 'Evaluez vos pairs - étape 2/5'
+start_corrections: 'OK, commencer les corrections'
+continue_corrections: 'OK, continuer les corrections'
