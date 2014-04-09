@@ -59,32 +59,19 @@
 					    </ul>
 					  </div> #}
 		             
-		            <script>
-		
-		
-		         
-		            $( document ).ready(function() {
-		              $(".collapse__div").collapse({
-		                query: '.collapse__div__title'
-		              });
-		            });
-		            
+                <script>
+                    $( document ).ready(function() {
+                      $(".collapse__div").collapse({
+                        query: '.collapse__div__title'
+                      });
+                    });
 		        </script> 
 		        
 		     </div> {# end 8 #}
 		     <div class='col-xs-4 col-md-4'>
-	        
-	        
-	         <div class='dropForum'>
-	           <div class='dropForum__title'>{{ 'forumTitle'|trans({}, 'solerni') }}</div>
-	           <div class='dropForum__content'>{{ 'forumContent'|trans({}, 'solerni') }}</div>
-	           <div class='dropForum__button'><a data-toggle="dropdown" class="btn btn-primary disabled-during-add btn-gris" href="#">{{ 'forumButton'|trans({}, 'solerni') }}</a></div>
-	         </div>
-	        
-	        
+                {% include 'IcapDropzoneBundle:Solerni:forumComponent.html.twig' %}
 		     </div>
-		     
-		     
+
 		   </div>  {# end 12 #} 
 		   </div>  
 		     
