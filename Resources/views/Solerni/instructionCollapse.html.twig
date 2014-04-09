@@ -1,0 +1,11 @@
+<div class='collapse__div'>
+    <div class='collapse__div__title'>Rappel des instructions pour constituer mon dossier</div>
+    <div class='collapse__div__instruction'>{{ dropzone.instruction|raw }}</div>
+</div>
+<script>
+    $( document ).ready(function() {
+      $(".collapse__div").collapse({
+        query: '.collapse__div__title'
+      });
+    });
+</script>

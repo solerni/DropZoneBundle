@@ -43,10 +43,9 @@
 	            
 		            <div class='date__end'>{{ 'date_limite'|trans({}, 'solerni') }} {{  dropzone.endAllowDrop|date('d/m/Y') }}</div>  
 		            
-		            <div class='collapse__div'>
-		                <div class='collapse__div__title'>Rappel des instructions pour constituer mon dossier</div>
-		                <div class='collapse__div__instruction'>{% if dropzone.instruction != null %}{{ dropzone.instruction|raw }}{% endif %}</div>
-		            </div>     
+                    {% if dropzone.instruction != null %}
+                        {% include 'IcapDropzoneBundle:Solerni:instructionCollapse.html.twig' %}
+                    {% endif %}
 		            
 		            {#<div class="btn-group">
 					    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -57,16 +56,7 @@
 					      <li><a href="#">{{ 'addDocument_PC'|trans({}, 'solerni') }}</a></li>
 					      <li><a href="#">Dropdown link</a></li>
 					    </ul>
-					  </div> #}
-		             
-                <script>
-                    $( document ).ready(function() {
-                      $(".collapse__div").collapse({
-                        query: '.collapse__div__title'
-                      });
-                    });
-		        </script> 
-		        
+					  </div> #}      
 		     </div> {# end 8 #}
 		     <div class='col-xs-4 col-md-4'>
                 {% include 'IcapDropzoneBundle:Solerni:forumComponent.html.twig' %}

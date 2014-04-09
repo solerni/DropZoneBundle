@@ -9,6 +9,7 @@ buttonStart: 'Ok, commencer à constituer mon dossier de preuves'
 # C
 checkboxStart: 'Je souhaite “soumettre mes preuves de compétences” et “je m''engage à évaluer 3 autres retours de preuve”'
 continue_corrections: 'OK, continuer les corrections'
+correcting_copy: 'Correction du dossier - étape 3/5'
 
 # D
 date_limite: 'Date limite pour déposer vos preuves : le'
