@@ -78,8 +78,6 @@
                      <p>A très bientôt</p>
                  </div>
                 {% endif %}
-                 
-                 
                  <a href="{{ path('icap_dropzone_correct', {'resourceId': dropzone.id}) }}" class="btn btn-primary pull-right{% if buttonDisabled == true %} disabled{% endif %}">{{ buttonText }}</a>
              </div>
         {% else %} {# Cas : on arrive pour la première fois #}
@@ -89,9 +87,10 @@
 	        
 	        <hr/>
 	        {% if dropzone.instruction is not null %}
-	        <div class='drop__instruction'>
-	                {{ dropzone.instruction|raw }}
-	        </div>
+                <div class='collapse__div'>
+                    <div class='collapse__div__title'>Rappel des instructions pour constituer mon dossier</div>
+                    <div class='collapse__div__instruction'>{% if dropzone.instruction != null %}{{ dropzone.instruction|raw }}{% endif %}</div>
+                </div>  
 	        {% endif %}
 	        
 	        <hr/>
@@ -105,9 +104,6 @@
 		    <div class='row'>
 		      <a href="{{ path('icap_dropzone_drop', {'resourceId': dropzone.id}) }}" class="btn btn-primary pull-right disabled drop__buttonStart">{{ 'buttonStart'|trans({}, 'solerni') }}</a>
 		    </div>   
-		    
-  
-	        
         <script>
         $(document).on('ready', function() {
         	$('#letsgo').change(function(){
@@ -117,9 +113,17 @@
         		    $('.drop__buttonStart').addClass("disabled");  
         		  }
         		});
+                
+         $(".collapse__div").collapse({
+                        query: '.collapse__div__title'
+                      });
         });
         </script>
-        
+                        <script>
+                    $( document ).ready(function() {
+                     
+                    });
+                </script> 
         {% endif %}
 {# 
         <hr/>############<hr/>
