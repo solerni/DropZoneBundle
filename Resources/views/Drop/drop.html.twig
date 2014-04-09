@@ -29,9 +29,9 @@
         
         {{ macros.flashBox() }}
         
-        <div class='drop__annoncement__badge' style='background-image:url()'>
-            Badge de compétence en cours d'évalution<br/>
-            <span class='bold'>&laquo;Travail et digital&raquo;</span>
+        <div class="slrn-dropzone-bloc">
+            {# header badge name  #}
+            {% include 'IcapDropzoneBundle:Solerni:headerEvalBadge.html.twig' %}
         </div>
 
         <h2>{{ 'welcome_constit1'|trans({}, 'solerni') }}- {{ 'step1'|trans({}, 'solerni') }}<span class='FAQ'><a href='#' class='FAQ'>FAQ</a></span></h2>      

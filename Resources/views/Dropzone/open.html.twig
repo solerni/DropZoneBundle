@@ -23,13 +23,10 @@
     <div class="container container-dropzone slrn-container-dropzone">
     
         {#{{ macros.flashBox() }}#}
-        
-        {# intégrer un comportement dynamique ou pseudo-dynamique pour injecter le bon nom de badge #}
-        <div class='drop__annoncement__badge' style='background-image:url()'>
-            Badge de compétence en cours d'évalution<br/>
-            <span class='bold'>&laquo;Travail et digital&raquo;</span>
+        <div class="slrn-dropzone-bloc">
+            {# header badge name  #}
+            {% include 'IcapDropzoneBundle:Solerni:headerEvalBadge.html.twig' %}
         </div>
-    
         {% if drop is not null and drop.finished == false %} {# Cas : case préalablement cochée #}
                           
              <script>
@@ -39,21 +36,23 @@
 			</script> 
         
         {% elseif drop is not null and drop.finished == true %} {# Cas : dossier terminé #}    
-                         
+                     
             <h2>{{ 'evaluation_by_peers'|trans({}, 'solerni') }}<span class='FAQ'><a href='{{ path( 'solerni_static_page', { 'name': 'cms_faq' } ) }}' class='FAQ'>FAQ</a></span></h2>
             <hr/>
-            <p class="slrn-dropzone-text">Votre dossier de preuves a bien été envoyé le {{ drop.getDropDate()|date("d/m/Y") }} pour évaluation par vos pairs.</p>
-             <div>
-                {#{% set nbDocument = drop.documents|length %}
-                {{ 'nbDocumentsInThisEvaluation'|transchoice(drop.documents|length, {}, 'icap_dropzone') }}#}
-                <ul>
-                    {% for document in drop.documents %}
-                        <li>
-                            {% include 'IcapDropzoneBundle:Document:simpleShowDocument.html.twig' %}
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+            <div>
+                <p class="slrn-dropzone-text">Votre dossier de preuves a bien été envoyé le {{ drop.getDropDate()|date("d/m/Y") }} pour évaluation par vos pairs.</p>
+                 <div>
+                    {#{% set nbDocument = drop.documents|length %}
+                    {{ 'nbDocumentsInThisEvaluation'|transchoice(drop.documents|length, {}, 'icap_dropzone') }}#}
+                    <ul>
+                        {% for document in drop.documents %}
+                            <li>
+                                {% include 'IcapDropzoneBundle:Document:simpleShowDocument.html.twig' %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+             </div>
              <hr/>
              <div>
                  {% if dropzone.peerReview %}
@@ -78,7 +77,9 @@
                      <p>A très bientôt</p>
                  </div>
                 {% endif %}
-                 <a href="{{ path('icap_dropzone_correct', {'resourceId': dropzone.id}) }}" class="btn btn-primary pull-right{% if buttonDisabled == true %} disabled{% endif %}">{{ buttonText }}</a>
+                 <div class="slrn-dropzone-bloc">
+                    <a href="{{ path('icap_dropzone_correct', {'resourceId': dropzone.id}) }}" class="btn-dropzone btn btn-primary pull-right{% if buttonDisabled == true %} disabled{% endif %}">{{ buttonText }}</a>
+                 </div>
              </div>
         {% else %} {# Cas : on arrive pour la première fois #}
           
@@ -87,10 +88,9 @@
 	        
 	        <hr/>
 	        {% if dropzone.instruction is not null %}
-                <div class='collapse__div'>
-                    <div class='collapse__div__title'>Rappel des instructions pour constituer mon dossier</div>
-                    <div class='collapse__div__instruction'>{% if dropzone.instruction != null %}{{ dropzone.instruction|raw }}{% endif %}</div>
-                </div>  
+	        <div class='drop__instruction'>
+                {{ dropzone.instruction|raw }}
+	        </div>
 	        {% endif %}
 	        
 	        <hr/>

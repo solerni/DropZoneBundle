@@ -100,7 +100,12 @@
                 <div class="col-md-8">{% if correction.totalGrade != null %}{{ correction.totalGrade|number_format(2) }}{% else %}--{% endif %}/20</div>
             </div>
         {% else %}
-            <div class="row">
+            <div class="slrn-dropzone-bloc">
+                {# header badge name  #}
+                {% include 'IcapDropzoneBundle:Solerni:headerEvalBadge.html.twig' %}
+            </div>
+
+            <div class="slrn-container-dropzone">
                 <div class="col-md-12">
                     <h2>{{ 'correcting_copy'|trans({}, 'solerni') }}</h2>
                 </div>
@@ -109,10 +114,10 @@
             <div class="row slrn-dropzone-bloc">
                 <div class="col-md-8">
                     <div class='date__end'>{{ 'date_limite'|trans({}, 'solerni') }} {{  dropzone.endAllowDrop|date('d/m/Y') }}</div>
-                    {% if dropzone.instruction != null %}
-                        {% include 'IcapDropzoneBundle:Solerni:instructionCollapse.html.twig' %}
-                    {% endif %}
-                </div>
+            {% if dropzone.instruction != null %}
+                {% include 'IcapDropzoneBundle:Solerni:instructionCollapse.html.twig' %}
+            {% endif %}
+            </div>
                <div class="col-md-4">
                     {% include 'IcapDropzoneBundle:Solerni:forumComponent.html.twig' %}
                 </div>
@@ -138,7 +143,7 @@
                     <div class="col-md-12">
                         <p class="slrn-bold">
                             <h4>{{ 'document_list_to_correct'|trans({}, 'solerni') }}</h4>
-                        </p>
+                </p>
                         <div class="slrn-grey-block">
                             {%  if correction.dropzone.isPeerReview() and correction.dropzone.hasCriteria() %}
                                 {% if correction.reporter == false %}
@@ -147,15 +152,15 @@
                                     <span class="label label-danger pull-right">{{ 'Already reported'|trans({}, 'icap_dropzone') }}</span>
                                 {% endif %}
                             {%  endif %}
-                            {% if correction.drop.documents|length > 0 %}
+                {% if correction.drop.documents|length > 0 %}
                                 <ul class="slrn-document-list" >
-                                {% for document in correction.drop.documents %}
-                                    <li>{% include 'IcapDropzoneBundle:Document:simpleShowDocument.html.twig' with {'document': document} %}</li>
-                                {% endfor %}
-                                </ul>
-                            {% else %}
+                        {% for document in correction.drop.documents %}
+                            <li>{% include 'IcapDropzoneBundle:Document:simpleShowDocument.html.twig' with {'document': document} %}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
                                 <p class="slrn-bold">{{ 'No document associated'|trans({}, 'icap_dropzone') }}</p>
-                            {% endif %}
+                {% endif %}
                         </div>
                     </div>
                 </div>
@@ -169,8 +174,8 @@
             </div>
         {% else %}
             <div class="slrn-dropzone-bloc">
-                {% block dropzone_correct_content %}
-                {% endblock %}
+            {% block dropzone_correct_content %}
+            {% endblock %}
             </div>
         {% endif %}
     </div>
