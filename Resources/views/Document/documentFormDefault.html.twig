@@ -1,4 +1,4 @@
-{% form_theme form "IcapDropzoneBundle::form_theme_bootstrap3.html.twig" %}
+{% form_theme form "IcapDropzoneBundle::form_theme_bootstrap3.html.twig" %} 
 
 <form class="form-inline" method="POST" action="{{ path('icap_dropzone_document', {'resourceId': dropzone.id, 'documentType': documentType, 'dropId': drop.id}) }}" {{ form_enctype(form) }}>
 
@@ -13,8 +13,20 @@
 
     {% block document_body %}
         <div class="row">
-            {{ form_row(form.document, {'label_col_size': ' ', 'input_col_size': 'col-md-8', 'attr': {'placeholder': (documentType~'_placeholder')|trans({}, 'icap_dropzone')}, 'label_attr': {'class': 'sr-only'} }) }}
+          {#}  {{ form_row(form.document, {'label_col_size': ' ', 'input_col_size': 'col-md-8', 'attr': {'placeholder': (documentType~'_placeholder')|trans({}, 'icap_dropzone')}, 'label_attr': {'class': 'sr-only'} }) }} {#}  
 
+			<div class="col-md-8">
+			 <div class="form-group pull-left">
+			    {# <input type="file" id="icap_dropzone_document_file_form_document" name="icap_dropzone_document_file_form[document]" required="required" placeholder="file_placeholder" class="form-control"> #}
+			    <div class="fileUpload btn btn-primary btn-gris">
+				    <span>Upload</span>
+				    <input id="icap_dropzone_document_file_form_document" name="icap_dropzone_document_file_form[document]" type="file" class="upload"/>
+				</div>
+				<input id="fakeone" placeholder="Aucun fichier choisi" disabled="disabled" class="form-control"/>
+				
+			 </div> 
+		    </div>
+			
             <div class="col-md-4">
                 <div class="form-group pull-right">
                     <a href="{{ path('icap_dropzone_drop', {'resourceId': dropzone.id}) }}" class="btn btn-default cancel-inline">{{ 'Cancel'|trans({}, 'icap_dropzone') }}</a>
@@ -23,7 +35,20 @@
                     </button>
                 </div>
             </div>
+			<script>
+				document.getElementById("icap_dropzone_document_file_form_document").onchange = function () {
+				    arr = this.value.split("\\");
+				    alert(arr);
+				    document.getElementById("fakeone").value = arr[2];
+
+					//var input = document.getElementById("icap_dropzone_document_file_form_document");
+					//alert(this.files[0]);
+				};
+			</script>
         </div>
     {% endblock %}
     {{ form_errors(form) }}
-{{ form_end(form) }}
+    {# {{ form_end(form) }} #}
+    
+    {{ form_row(form._token)}}
+</form>
