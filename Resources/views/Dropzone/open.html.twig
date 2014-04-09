@@ -87,7 +87,10 @@
 	        
 	        <hr/>
 	        {% if dropzone.instruction is not null %}
-                {% include 'IcapDropzoneBundle:Solerni:instructionCollapse.html.twig' %}
+                <div class='collapse__div'>
+                    <div class='collapse__div__title'>Rappel des instructions pour constituer mon dossier</div>
+                    <div class='collapse__div__instruction'>{% if dropzone.instruction != null %}{{ dropzone.instruction|raw }}{% endif %}</div>
+                </div>  
 	        {% endif %}
 	        
 	        <hr/>
