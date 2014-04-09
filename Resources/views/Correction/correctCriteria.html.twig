@@ -3,17 +3,16 @@
 {% form_theme form 'IcapDropzoneBundle::form_theme_correct_criteria.html.twig' %}
 
 {% block dropzone_correct_content %}
-    <h3>
+    <h4>
         {{ 'Evaluation criteria'|trans({}, 'icap_dropzone') }}
-    </h3>
+    </h4>
 
     <p>
-        {{ 'Note that you will assign depends on the following criteria'|trans({}, 'icap_dropzone') }}
+        La note que vous allez attribuer à ce dossier dépend de votre évaluation pour chacun des critères ci-après. Selon vous, l'ensemble des documents que vous avez examinés répondent-ils aux critères suivants ?
     </p>
 
-    <div class="container">
         {% if dropzone.hasCriteria() %}
-            <div class="row">
+            <div class="">
                 <form id="correct-form" method="POST" action="{% if edit == false %}#{% elseif admin == true %}{{ path('icap_dropzone_drops_detail_correction_paginated', {'resourceId': dropzone.id, 'state' : edit ? 'edit' : 'show', 'correctionId': correction.id, 'page': pager.currentPage}) }}{% else %}{{ path('icap_dropzone_correct_paginated', {'resourceId': dropzone.id, 'page': pager.currentPage}) }}{% endif %}" class="form-horizontal">
                     <hr/>
                     {% for criterion in pager.currentPageResults %}
@@ -100,7 +99,6 @@
         {% else %}
             <div class="alert alert-warning">L'évaluation ne possède aucun critère pour corriger les copies. La correction est impossible.</div>
         {% endif %}
-    </div>
 {% endblock %}
 
 {% block stylesheets %}

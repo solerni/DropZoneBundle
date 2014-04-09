@@ -165,14 +165,16 @@ h3 {
 }
 .dropForum__button{
 	text-align: center;
-	
+}
+
+.slrn-grey-block {
+    background-color: #EEEEEF;
+    padding: 1em;
+    margin: 1.5em 0;
 }
 
 .slrn-no-copies {
-    background-color: #EEEEEF;
-    padding: 1em;
     padding-left: 4.2em;
-    margin: 1.5em 0;
     position: relative;
 }
 
@@ -184,6 +186,30 @@ h3 {
     position: absolute;
     left: 1em;
 }
+
+.slrn-dropzone-bloc {
+    padding: 1em 0;
+}
+
+.slrn-document-list {
+    list-style: none inside none;
+    line-height: 2;
+    margin: 0;
+    padding: 0;
+}
+
+.slrn-report-button {
+    width: 37px;
+    height: 38px;
+    background: transparent url(../../orangetheme/images/sprites_solerni.png) no-repeat 0 -725px scroll;
+}
+
+.slrn-dropzone-bloc .tooltip-inner { background-color: #999 !important; color: #FFF; }
+
+.slrn-dropzone-bloc .tooltip.top .tooltip-arrow,
+.slrn-dropzone-bloc .tooltip.top .tooltip-arrow:after { border-top-color: #999 !important; }
+
+.slrn-dropzone-bloc .tooltip.in { opacity:1; filter:alpha( opacity=100 ); }
 
 .fileUpload {
 	position: relative;
