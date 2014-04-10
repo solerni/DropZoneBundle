@@ -35,7 +35,7 @@
 			/*]]>*/
 			</script> 
         
-        {% elseif drop is not null and drop.finished == true %} {# Cas : dossier terminé #}    
+        {% elseif drop is not null and drop.finished == true and expectedCorrections > 0%} {# Cas : dossier terminé #}    
                      
             <h2>{{ 'evaluation_by_peers'|trans({}, 'solerni') }}<span class='FAQ'><a href='{{ path( 'solerni_static_page', { 'name': 'cms_faq' } ) }}' class='FAQ'>FAQ</a></span></h2>
             <hr/>
@@ -81,6 +81,10 @@
                     <a href="{{ path('icap_dropzone_correct', {'resourceId': dropzone.id}) }}" class="btn-dropzone btn btn-primary pull-right{% if buttonDisabled == true %} disabled{% endif %}">{{ buttonText }}</a>
                  </div>
              </div>
+        {% elseif drop is not null and drop.finished == true and expectedCorrections <= 0 %}
+           
+           {% include 'IcapDropzoneBundle:Solerni:resultatPostEval.html.twig' %}
+           
         {% else %} {# Cas : on arrive pour la première fois #}
           
 	    
