@@ -30,8 +30,8 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-8">
-                                <div class="slrn-form-radio col-md-12">
+                            <div class="row col-md-8">
+                                <div class="row slrn-form-radio col-md-12">
                                     <div class="col-md-3">
                                         {{ 'Not at all'|trans({}, 'icap_dropzone' ) }}
                                     </div>
@@ -61,29 +61,29 @@
 
 
                     {% if edit == true %}
-                        <div class="btn-group pull-right">
+                        <div class="slrn-correct-buttons pull-right">
                             {% if admin == true %}
                                 {% if pager.currentPage == 1 %}
-                                    <a href="{{ path('icap_dropzone_drops_detail', {'resourceId': dropzone.id, 'dropId': correction.drop.id}) }}" class="btn btn-default">{{ 'Cancel'|trans({}, 'icap_dropzone') }}</a>
+                                    <a href="{{ path('icap_dropzone_drops_detail', {'resourceId': dropzone.id, 'dropId': correction.drop.id}) }}" class="btn btn-default slrn-dropzone-cancel btn-gris">{{ 'Cancel'|trans({}, 'icap_dropzone') }}</a>
                                 {% else %}
                                     {% set previousPage = pager.currentPage-1 %}
                                     <a href="{{ path('icap_dropzone_drops_detail_correction_paginated', {'resourceId': dropzone.id, 'state' : edit ? 'edit' : 'show', 'correctionId': correction.id, 'page': previousPage}) }}" class="btn btn-default back-button">{{ 'Previous'|trans({}, 'icap_dropzone') }}</a>
                                 {% endif %}
                             {% else %}
                                 {% if pager.currentPage == 1 %}
-                                    <a href="{{ path('icap_dropzone_open', {'resourceId': dropzone.id}) }}" class="btn btn-default">{{ 'Cancel'|trans({}, 'icap_dropzone') }}</a>
+                                    <a href="{{ path('icap_dropzone_open', {'resourceId': dropzone.id}) }}" class="btn btn-default slrn-dropzone-cancel btn-gris">{{ 'Cancel'|trans({}, 'icap_dropzone') }}</a>
                                 {% else %}
                                     {% set previousPage = pager.currentPage-1 %}
                                     <a href="{{ path('icap_dropzone_correct_paginated', {'resourceId': dropzone.id, 'page': previousPage}) }}" class="btn btn-default back-button">{{ 'Previous'|trans({}, 'icap_dropzone') }}</a>
                                 {% endif %}
                             {% endif %}
 
-                            <button type="submit" class="btn btn-primary">{{ 'Save and continue'|trans({}, 'icap_dropzone') }}</button>
+                            <button type="submit" class="btn btn-primary">{{ 'continue'|trans({}, 'solerni') }}</button>
                         </div>
                     {% else %}
-                        <div class="btn-group pull-right">
+                        <div class="pull-right">
                             {% if pager.currentPage == 1 %}
-                                <a href="{{ path('icap_dropzone_drops_detail', {'resourceId': dropzone.id, 'dropId': correction.drop.id}) }}" class="btn btn-default">{{ 'Cancel'|trans({}, 'icap_dropzone') }}</a>
+                                <a href="{{ path('icap_dropzone_drops_detail', {'resourceId': dropzone.id, 'dropId': correction.drop.id}) }}" class="btn btn-default slrn-dropzone-cancel btn-gris">{{ 'Cancel'|trans({}, 'icap_dropzone') }}</a>
                             {% else %}
                                 {% set previousPage = pager.currentPage-1 %}
                                 <a href="{{ path('icap_dropzone_drops_detail_correction_paginated', {'resourceId': dropzone.id, 'state' : edit ? 'edit' : 'show', 'correctionId': correction.id, 'page': previousPage}) }}" class="btn btn-default">{{ 'Previous'|trans({}, 'icap_dropzone') }}</a>

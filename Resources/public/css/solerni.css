@@ -168,6 +168,7 @@ h3 {
 .slrn-no-copies {
     padding-left: 4.2em;
     position: relative;
+    min-height: 6.5em;
 }
 
 .slrn-no-copies:before {
@@ -218,18 +219,41 @@ h3 {
 }
 
 .slrn-form-radio .radio-inline {
-    margin: 0 1em !important;
-    padding: 0;
+    padding: 0 1.5em;
+}
+
+.slrn-form-radio .radio-inline:first-child {
+    padding-left: 0;
+}
+
+.slrn-form-radio .radio-inline:last-child {
+    padding-right: 0;
 }
 
 .slrn-form-radio .radio-inline input[type=radio] {
     background-color: #CCC;
+    margin: 0;
 }
 
+.slrn-dropzone-cancel {
+    margin-right: 1em;
+    color: #FFF;
+}
+
+.slrn-dropzone-cancel:hover {
+    color: #FFF;
+}
+
+.slrn-correct-final-note {
+    color: #C9D200;
+    font-size: 1.5em;
+    
+}
 
 .line-2-7{
 	line-height:2.7em;
 }
+
 .btn-garbage{
 	background-image: url('../../orangetheme/images/sprites_solerni.png');
 	background-position: -135px -505px;

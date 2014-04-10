@@ -65,7 +65,7 @@
                 {% endif %}
                 {% if dropzone.expectedTotalCorrection > expectedCorrections %}
                     {% set buttonText = 'continue_corrections'|trans({}, 'solerni') %}
-                    <p>Vous devez encore <span class="slrn-bold">évaluer {{ expectedCorrections }} dossiers afin d'obtenir votre évaluation finale</span>. Vous avez jusqu'au pour corriger ces dossiers.</p>
+                    <p>Vous devez encore <span class="slrn-bold">évaluer {{ expectedCorrections }} dossier{% if expectedCorrections > 1 %}s{% endif %} afin d'obtenir votre évaluation finale</span>. Vous avez jusqu'au {{ dropzone.getEndReview()|date("d/m/Y") }} pour corriger ces dossiers.</p>
                 {% endif %}
              </div>
              <div>
