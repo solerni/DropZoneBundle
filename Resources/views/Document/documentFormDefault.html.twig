@@ -15,19 +15,27 @@
         <div class="row">
           {#}  {{ form_row(form.document, {'label_col_size': ' ', 'input_col_size': 'col-md-8', 'attr': {'placeholder': (documentType~'_placeholder')|trans({}, 'icap_dropzone')}, 'label_attr': {'class': 'sr-only'} }) }} {#}  
 
-			<div class="col-md-8">
-			 <div class="form-group pull-left">
-			    {# <input type="file" id="icap_dropzone_document_file_form_document" name="icap_dropzone_document_file_form[document]" required="required" placeholder="file_placeholder" class="form-control"> #}
-			    <div class="fileUpload btn btn-primary btn-gris">
+			<div class="col-md-9">
+			         {% if documentType == 'url' %}
+			         
+	         <input type="url" id="icap_dropzone_document_file_form_document" 
+	             name="icap_dropzone_document_file_form[document]" required="required" 
+	             placeholder="http://..." class="form-control">
+			         
+			         {% elseif documentType == 'file' %}
+			         
+			   <div class="fileUpload btn btn-primary btn-gris">
 				    <span>Upload</span>
-				    <input id="icap_dropzone_document_file_form_document" name="icap_dropzone_document_file_form[document]" type="file" class="upload"/>
+				    <input id="icap_dropzone_document_file_form_document" name="icap_dropzone_document_file_form[document]" 
+				        type="file" class="upload"/>
 				</div>
-				<input id="fakeone" placeholder="Aucun fichier choisi" disabled="disabled" class="form-control"/>
-				
-			 </div> 
+		      <input id="fakeone" placeholder="Aucun fichier choisi" disabled="disabled" class="form-control"/>
+			         
+			         {% endif %}
+			   
 		    </div>
-			
-            <div class="col-md-4">
+		    
+            <div class="col-md-3">
                 <div class="form-group pull-right">
                     <a href="{{ path('icap_dropzone_drop', {'resourceId': dropzone.id}) }}" class="btn btn-default cancel-inline">{{ 'Cancel'|trans({}, 'icap_dropzone') }}</a>
                     <button type="submit" class="btn btn-primary">
@@ -38,8 +46,7 @@
 			<script>
 				document.getElementById("icap_dropzone_document_file_form_document").onchange = function () {
 				    arr = this.value.split("\\");
-				    alert(arr);
-				    document.getElementById("fakeone").value = arr[2];
+				    document.getElementById("fakeone").value = arr[arr.length-1];
 
 					//var input = document.getElementById("icap_dropzone_document_file_form_document");
 					//alert(this.files[0]);
