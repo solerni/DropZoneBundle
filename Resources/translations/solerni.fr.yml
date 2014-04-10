@@ -20,6 +20,9 @@ document_list_to_correct: 'Documents à évaluer'
 
 # E
 evaluation_by_peers: 'Evaluez vos pairs - étape 2/5'
+endOK: 'Bravo !'
+endNOK: 'Désolé !'
+endNotOver: 'C''est presque terminé !'
 
 # F
 faq : 'FAQ'

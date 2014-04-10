@@ -284,6 +284,6 @@ h3 {
 #fakeone{
 	width: 460px;
 }
-#icap_dropzone_document_file_form_document{
-	
+.redlink a, .redlink a:hover{
+	color:#FF004F;
 }
