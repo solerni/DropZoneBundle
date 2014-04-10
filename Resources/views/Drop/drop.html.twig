@@ -100,13 +100,16 @@
 		
 		        {% for document in drop.documents %}
 		            <hr/>
-		            <div class="row">
-		                <div class="col-md-9">
+		            <div class="row line-2-7">
+		                <div class="col-md-11">
 		                    {% include 'IcapDropzoneBundle:Document:simpleShowDocument.html.twig' %}
 		                </div>
 		
-		                <div class="col-md-3">
-		                    <a href="{{ path('icap_dropzone_delete_document', {'resourceId': dropzone.id, 'dropId': drop.id, 'documentId': document.id}) }}" class="btn btn-danger btn-sm pull-right launch-modal"><span class="glyphicon icon-trash"></span> {{ 'Delete'|trans({}, 'icap_dropzone') }}</a>
+		                <div class="col-md-1">
+		                    <a href="{{ path('icap_dropzone_delete_document', {'resourceId': dropzone.id, 'dropId': drop.id, 'documentId': document.id}) }}" 
+		                      class="btn-garbage launch-modal">
+		                      <span class="glyphicon icon-trash"></span> {{ 'Delete'|trans({}, 'icap_dropzone') }}
+		                    </a>
 		                </div>
 		            </div>
 		        {% endfor %}

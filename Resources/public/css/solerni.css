@@ -46,7 +46,7 @@ a.FAQ, a.FAQ:hover{
 	color:#FF004F;
 	font-weight: normal;
 	float: right;
-	font-size: 0.7em;
+	font-size: 0.6em;
 	right: 0;
 	line-height: 1.7em;
 }
@@ -81,16 +81,6 @@ h3 {
 .dropdown-gris-menu > li > a:hover{
 	background-color: #888686;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 .drop__annoncement__badge{
@@ -213,6 +203,21 @@ h3 {
 
 .slrn-dropzone-bloc .tooltip.in { opacity:1; filter:alpha( opacity=100 ); }
 
+.line-2-7{
+	line-height:2.7em;
+}
+.btn-garbage{
+	background-image: url('../../orangetheme/images/sprites_solerni.png');
+	background-position: -135px -505px;
+	width: 36px;
+	height: 36px;
+	text-decoration: none;
+	text-indent: -999em;
+	display: block;
+}
+.btn-garbage:hover{
+	background-position: -135px -543px;
+}
 .fileUpload {
 	position: relative;
 	overflow: hidden;
