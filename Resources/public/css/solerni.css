@@ -213,6 +213,20 @@ h3 {
     text-align: right;
 }
 
+.slrn-form-radio {
+    text-align: center;
+}
+
+.slrn-form-radio .radio-inline {
+    margin: 0 1em !important;
+    padding: 0;
+}
+
+.slrn-form-radio .radio-inline input[type=radio] {
+    background-color: #CCC;
+}
+
+
 .line-2-7{
 	line-height:2.7em;
 }
