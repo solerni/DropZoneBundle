@@ -34,7 +34,7 @@
             {% include 'IcapDropzoneBundle:Solerni:headerEvalBadge.html.twig' %}
         </div>
 
-        <h2>{{ 'welcome_constit1'|trans({}, 'solerni') }}- {{ 'step1'|trans({}, 'solerni') }}<span class='FAQ'><a href='#' class='FAQ'>FAQ</a></span></h2>      
+        <h2>{{ 'welcome_constit1'|trans({}, 'solerni') }}- {{ 'step1'|trans({}, 'solerni') }}<span class='FAQ'><a href='{{ path( 'solerni_static_page', { 'name': 'cms_faq' } ) }}' class='FAQ'>FAQ</a></span></h2>      
             
             <hr/>
             <div class="row">

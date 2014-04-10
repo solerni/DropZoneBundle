@@ -190,6 +190,7 @@ h3 {
     padding: 0;
 }
 
+
 .slrn-report-button {
     width: 37px;
     height: 38px;
@@ -202,6 +203,15 @@ h3 {
 .slrn-dropzone-bloc .tooltip.top .tooltip-arrow:after { border-top-color: #999 !important; }
 
 .slrn-dropzone-bloc .tooltip.in { opacity:1; filter:alpha( opacity=100 ); }
+
+.slrn-form-label,
+.slrn-form-note {
+    font-weight: bold;
+}
+
+.slrn-form-note { 
+    text-align: right;
+}
 
 .line-2-7{
 	line-height:2.7em;

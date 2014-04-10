@@ -12,27 +12,39 @@
     </p>
 
         {% if dropzone.hasCriteria() %}
-            <div class="">
+            <div class="slrn-criteres">
                 <form id="correct-form" method="POST" action="{% if edit == false %}#{% elseif admin == true %}{{ path('icap_dropzone_drops_detail_correction_paginated', {'resourceId': dropzone.id, 'state' : edit ? 'edit' : 'show', 'correctionId': correction.id, 'page': pager.currentPage}) }}{% else %}{{ path('icap_dropzone_correct_paginated', {'resourceId': dropzone.id, 'page': pager.currentPage}) }}{% endif %}" class="form-horizontal">
                     <hr/>
                     {% for criterion in pager.currentPageResults %}
                         {% set criterionNumber = (((pager.currentPage-1) * pager.maxPerPage) + loop.index) %}
                         <div class="row">
                             <div class="col-md-12">
-                                <h4>#{{ criterionNumber }}</h4>
+                                <h4>{{ criterionNumber }}<exp>{% if criterionNumber == 1 %}er{% else %}ème{% endif %}</exp> critère</h4>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-11">
-                                <div class="form-group">
-                                    {{ form_row(form[criterion.id]) }}
+                            <div class="col-md-12">
+                                <div class="slrn-form-label">
+                                    {{ form_label(form[criterion.id], label|default(null), { 'label_attr' : { 'style': '' } }) }}
                                 </div>
                             </div>
-                            <div class="col-md-1 pull-tight">
-                                <strong>
-                                    Note
-                                </strong>
-                                <div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="slrn-form-radio col-md-12">
+                                    <div class="col-md-3">
+                                        {{ 'Not at all'|trans({}, 'icap_dropzone' ) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                    {{ form_widget( form[criterion.id] ) }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ 'Entirely'|trans({}, 'icap_dropzone' ) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 pull-tight slrn-form-note">
+                                Note : 
                                     {% set criterionGrade = 0 %}
                                     {%  for value in form[criterion.id].vars.value %}
                                         {% if value == true %}
@@ -40,7 +52,6 @@
                                         {% endif %}
                                     {% endfor %}
                                     <span class="criterion-grade" data-criterion="icap_dropzone_correct_criteria_page_form[{{ criterion.id }}]">{{ criterionGrade }}</span>/{{ dropzone.totalCriteriaColumn-1 }}
-                                </div>
                             </div>
                         </div>
 
@@ -133,7 +144,6 @@
 
             var calculateTotalGrade = function () {
                 var totalGrade = 20;
-
                 $('.correctionGrade').html(totalGrade);
             };
 
