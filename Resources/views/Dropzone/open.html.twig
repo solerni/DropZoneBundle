@@ -77,6 +77,11 @@
                      <p>A très bientôt</p>
                  </div>
                 {% endif %}
+                {% if dropzone.timeRemainingBeforeStartReview > 0 %}
+                    {% set buttonDisabled = true %}
+                    <p>L'évaluation des copies n'est pas encore commencée et débutera le {{ dropzone.startReview()|date("d/m/Y") }}.</p>
+                     <p>A très bientôt</p>
+                 {% endif %}
                  <div class="slrn-dropzone-bloc">
                     <a href="{{ path('icap_dropzone_correct', {'resourceId': dropzone.id}) }}" class="btn-dropzone btn btn-primary pull-right{% if buttonDisabled == true %} disabled{% endif %}">{{ buttonText }}</a>
                  </div>
