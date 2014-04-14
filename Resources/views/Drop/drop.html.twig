@@ -74,7 +74,7 @@
 		        {% endif %}  #}
 		        
 		        <h3>{{ 'yourFiles'|trans({},'solerni') }}</h3>
-		
+
 		        {% if allowedTypes|length <= 0 %}
 		            <span class="text-danger">{{ 'No document type allowed'|trans({}, 'icap_dropzone') }}</span>
 		        {% elseif allowedTypes|length == 1 %}

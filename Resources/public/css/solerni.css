@@ -247,7 +247,12 @@ h3 {
 .slrn-correct-final-note {
     color: #C9D200;
     font-size: 1.5em;
-    
+}
+
+.slrn-disabled {
+    opacity: .65;
+    box-shadow: none;
+    cursor: not-allowed;
 }
 
 .line-2-7{
@@ -287,3 +292,4 @@ h3 {
 .redlink a, .redlink a:hover{
 	color:#FF004F;
 }
+

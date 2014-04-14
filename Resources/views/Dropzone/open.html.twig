@@ -79,9 +79,9 @@
                 {% endif %}
                 {% if dropzone.timeRemainingBeforeStartReview > 0 %}
                     {% set buttonDisabled = true %}
-                    <p>L'évaluation des copies n'est pas encore commencée et débutera le {{ dropzone.startReview()|date("d/m/Y") }}.</p>
-                     <p>A très bientôt</p>
-                 {% endif %}
+                    <p>Vous avez terminé et souhaitez commencer à évaluer les dossiers de vos pairs ?</p>
+                    <p>Merci de patienter encore jusqu'au {{ dropzone.startReview()|date("d/m/Y") }}, date d'ouverture des évaluations du badge en cours.</p>
+                {% endif %}
                  <div class="slrn-dropzone-bloc">
                     <a href="{{ path('icap_dropzone_correct', {'resourceId': dropzone.id}) }}" class="btn-dropzone btn btn-primary pull-right{% if buttonDisabled == true %} disabled{% endif %}">{{ buttonText }}</a>
                  </div>
@@ -91,49 +91,49 @@
            {% include 'IcapDropzoneBundle:Solerni:resultatPostEval.html.twig' %}
            
         {% else %} {# Cas : on arrive pour la première fois #}
-          
-	    
 	        <h2>{{ 'welcome'|trans({}, 'solerni') }}<span class='FAQ'><a href='#' class='FAQ'>FAQ</a></span></h2>
-	        
 	        <hr/>
 	        {% if dropzone.instruction is not null %}
 	        <div class='drop__instruction'>
                 {{ dropzone.instruction|raw }}
 	        </div>
 	        {% endif %}
-	        
 	        <hr/>
-	        
-		    
-		    <label for='letsgo' >
-		      <input type='checkbox' value='go' name='letsgo' id='letsgo'/>
-		      {{ 'checkboxStart'|trans({}, 'solerni') }}
-		    </label>
-		    
 		    <div class='row'>
-		      <a href="{{ path('icap_dropzone_drop', {'resourceId': dropzone.id}) }}" class="btn btn-primary pull-right disabled drop__buttonStart">{{ 'buttonStart'|trans({}, 'solerni') }}</a>
-		    </div>   
+            {% if dropzone.isNotStarted %}
+                {% set tooltipMessage = 'Cette évaluation commencera le ' ~ dropzone.startAllowDrop()|date("d/m/Y") %}
+                {% set noLetsgo = true %}
+            {% endif %}
+            {% if dropzone.timeRemainingBeforeEndReview == 0 %}
+                {% set tooltipMessage = 'Cette évaluation est terminée' %}
+                {% set noLetsgo = true %}
+            {% endif %}
+            {% if noLetsgo is not defined %}
+                <label for='letsgo' >
+                <input type='checkbox' value='go' name='letsgo' id='letsgo'/>
+                {{ 'checkboxStart'|trans({}, 'solerni') }}
+                </label>  
+            {% endif %}
+            {% if tooltipMessage is defined %}<div class="pull-right" data-toggle="tooltip" data-original-title="{{ tooltipMessage }}">{% endif %}
+            <a href="{{ path('icap_dropzone_drop', { 'resourceId': dropzone.id }) }}" class="btn btn-primary pull-right disabled drop__buttonStart">{{ 'buttonStart'|trans({}, 'solerni') }}</a>
+		    {% if tooltipMessage is defined %}</div>{% endif %}
+            </div>   
         <script>
         $(document).on('ready', function() {
-        	$('#letsgo').change(function(){
-        		  if($(this).is(':checked')){
-        		    $('.drop__buttonStart').removeClass("disabled");  
-        		  } else {
-        		    $('.drop__buttonStart').addClass("disabled");  
-        		  }
-        		});
-                
-         $(".collapse__div").collapse({
-                        query: '.collapse__div__title'
-                      });
+            $('#letsgo').change(function(){
+              if($(this).is(':checked')){
+                $('.drop__buttonStart').removeClass("disabled");  
+              } else {
+                $('.drop__buttonStart').addClass("disabled");  
+              }
+            });
+
+            $(".collapse__div").collapse({
+                query: '.collapse__div__title'
+            });
         });
         </script>
-                        <script>
-                    $( document ).ready(function() {
-                     
-                    });
-                </script> 
-        {% endif %}
+           {% endif %}
 {# 
         <hr/>############<hr/>
 
