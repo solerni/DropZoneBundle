@@ -61,7 +61,7 @@
              <div>
                 {% if dropzone.expectedTotalCorrection == expectedCorrections %}
                     {% set buttonText = 'start_corrections'|trans({}, 'solerni') %}
-                    <p>Vous devez à votre tour <span class="slrn-bold">évaluer 3 dossiers afin d'obtenir votre évaluation finale</span>. Vous avez jusqu'au {{ dropzone.getEndReview()|date("d/m/Y") }} pour corriger ces dossiers.</p>
+                    <p>Vous devez à votre tour <span class="slrn-bold">évaluer {{ expectedCorrections }} dossiers afin d'obtenir votre évaluation finale</span>. Vous avez jusqu'au {{ dropzone.getEndReview()|date("d/m/Y") }} pour corriger ces dossiers.</p>
                 {% endif %}
                 {% if dropzone.expectedTotalCorrection > expectedCorrections %}
                     {% set buttonText = 'continue_corrections'|trans({}, 'solerni') %}
@@ -121,7 +121,7 @@
                 </div>
                 <label for='letsgo' >
                 <input type='checkbox' value='go' name='letsgo' id='letsgo'/>
-                {{ 'checkboxStart'|trans({}, 'solerni') }}
+                {{ 'checkboxStart'|trans({ 'expectedCorrections': expectedCorrections }, 'solerni') }}
                 </label>  
             {% endif %}
                 <a href="{{ path('icap_dropzone_drop', { 'resourceId': dropzone.id }) }}" class="btn btn-primary pull-right disabled drop__buttonStart">{{ 'buttonStart'|trans({}, 'solerni') }}</a>
