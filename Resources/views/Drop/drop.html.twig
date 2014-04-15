@@ -136,8 +136,11 @@
 	                <div class="col-md-12">
 	
 	                    <!-- Button trigger modal -->
-	                    <a data-toggle="modal" href="#saveModal" class="btn btn-primary pull-right disabled-during-add">{{ 'Save and finished'|trans({}, 'icap_dropzone') }}</a>
-	
+                        {% if dropzone.endAllowDrop|date('d/m/Y') < "now"|date('d/m/Y') %}
+                            <a data-placement="top" data-toggle="tooltip" title="Le délai de dépôt de preuves est expiré" data-original-title="Le délai de dépôt de preuves est expiré" class="btn btn-primary btn-gris pull-right">{{ 'Save and finished'|trans({}, 'icap_dropzone') }}</a>    
+                        {% else %}
+                            <a data-toggle="modal" href="#saveModal" class="btn btn-primary pull-right disabled-during-add">{{ 'Save and finished'|trans({}, 'icap_dropzone') }}</a>
+                        {% endif %}
 	                    <!-- Modal -->
 	                    <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	                        <div class="modal-dialog">
@@ -151,10 +154,9 @@
 	                                </div>
 	                                <div class="modal-footer">
 	                                    <a href="#" class="btn btn-default" data-dismiss="modal">{{ 'Cancel'|trans({}, 'icap_dropzone') }}</a>
-	
-	                                    <button type="submit" class="btn btn-primary pull-right">
-	                                        {{ 'Confirm and finished'|trans({}, 'icap_dropzone') }}
-	                                    </button>
+                                        <button type="submit" class="btn btn-primary pull-right">
+                                            {{ 'Confirm and finished'|trans({}, 'icap_dropzone') }}
+                                        </button>
 	                                </div>
 	                            </div><!-- /.modal-content -->
 	                        </div><!-- /.modal-dialog -->

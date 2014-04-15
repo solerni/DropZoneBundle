@@ -91,7 +91,7 @@
            {% include 'IcapDropzoneBundle:Solerni:resultatPostEval.html.twig' %}
            
         {% else %} {# Cas : on arrive pour la première fois #}
-	        <h2>{{ 'welcome'|trans({}, 'solerni') }}<span class='FAQ'><a href='#' class='FAQ'>FAQ</a></span></h2>
+	        <h2>{{ 'welcome'|trans({}, 'solerni') }}<span class='FAQ'><a href='{{ path( 'solerni_static_page', { 'name': 'cms_faq' } ) }}' class='FAQ'>FAQ</a></span></h2>
 	        <hr/>
 	        {% if dropzone.instruction is not null %}
 	        <div class='drop__instruction'>
@@ -101,22 +101,30 @@
 	        <hr/>
 		    <div class='row'>
             {% if dropzone.isNotStarted %}
-                {% set tooltipMessage = 'Cette évaluation commencera le ' ~ dropzone.startAllowDrop()|date("d/m/Y") %}
+                <div class="slrn-grey-block slrn-no-copies">
+                     <br />
+                     <p>Cette évaluation commencera le {{ dropzone.startAllowDrop()|date("d/m/Y") }}</p>
+                </div>
                 {% set noLetsgo = true %}
             {% endif %}
-            {% if dropzone.timeRemainingBeforeEndReview == 0 %}
-                {% set tooltipMessage = 'Cette évaluation est terminée' %}
+            {% if dropzone.isFinished %}
+                <div class="slrn-grey-block slrn-no-copies">
+                     <br />
+                     <p>Cette évaluation est terminée</p>
+                </div>
                 {% set noLetsgo = true %}
             {% endif %}
             {% if noLetsgo is not defined %}
+                <div class="slrn-grey-block slrn-no-copies">
+                     <br />
+                     <p>Pour débuter cette évaluation vous devez en accepter au préalable les conditions en cochant la case ci-dessous</p>
+                </div>
                 <label for='letsgo' >
                 <input type='checkbox' value='go' name='letsgo' id='letsgo'/>
                 {{ 'checkboxStart'|trans({}, 'solerni') }}
                 </label>  
             {% endif %}
-            {% if tooltipMessage is defined %}<div class="pull-right" data-toggle="tooltip" data-original-title="{{ tooltipMessage }}">{% endif %}
-            <a href="{{ path('icap_dropzone_drop', { 'resourceId': dropzone.id }) }}" class="btn btn-primary pull-right disabled drop__buttonStart">{{ 'buttonStart'|trans({}, 'solerni') }}</a>
-		    {% if tooltipMessage is defined %}</div>{% endif %}
+                <a href="{{ path('icap_dropzone_drop', { 'resourceId': dropzone.id }) }}" class="btn btn-primary pull-right disabled drop__buttonStart">{{ 'buttonStart'|trans({}, 'solerni') }}</a>
             </div>   
         <script>
         $(document).on('ready', function() {
