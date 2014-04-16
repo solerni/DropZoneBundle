@@ -77,10 +77,12 @@
                      <p>A très bientôt</p>
                  </div>
                 {% endif %}
-                {% if dropzone.timeRemainingBeforeStartReview > 0 %}
+                {% if dropzone.timeRemainingBeforeStartReview > 0 or dropzone.isPeerReview == false %}
                     {% set buttonDisabled = true %}
-                    <p>Vous avez terminé et souhaitez commencer à évaluer les dossiers de vos pairs ?</p>
-                    <p>Merci de patienter encore jusqu'au {{ dropzone.startReview()|date("d/m/Y") }}, date d'ouverture des évaluations du badge en cours.</p>
+                    <div class="slrn-grey-block slrn-no-copies">
+                       <p>Vous avez terminé et souhaitez commencer à évaluer les dossiers de vos pairs ?</p>
+                       <p>Merci de patienter encore jusqu'au {{ dropzone.startReview()|date("d/m/Y") }}, date d'ouverture des évaluations du badge en cours.</p>
+                    </div>
                 {% endif %}
                  <div class="slrn-dropzone-bloc">
                     <a href="{{ path('icap_dropzone_correct', {'resourceId': dropzone.id}) }}" class="btn-dropzone btn btn-primary pull-right{% if buttonDisabled == true %} disabled{% endif %}">{{ buttonText }}</a>
