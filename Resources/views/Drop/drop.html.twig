@@ -209,7 +209,7 @@
             var resourceNodeId = null;
 
             var callBack = function(nodes){
-                console.log('callback custom pour document');
+                /*console.log('callback custom pour document');*/
                 var id = _.keys(nodes)[0];
                 var name = nodes[_.keys(nodes)][0];
                 var resourceTypes = nodes[_.keys(nodes)][1];
@@ -241,7 +241,7 @@
                 $('.disabled-during-add').attr('disabled', 'disabled');
 
                 var launchResourcePicker = $(this).hasClass('launch-resource-picker');
-                console.log(launchResourcePicker);
+                /*console.log(launchResourcePicker);*/
 
                 $.get($(this).attr('href'))
                     .always(function () {
@@ -254,9 +254,9 @@
                             Claroline.ResourceManager.picker('open');
 
                             $('#modal-picker').on('hidden.bs.modal', function () {
-                                console.log('hidden modal');
+                                /*console.log('hidden modal');*/
                                 if (resourceNodeId == null) {
-                                    console.log('hidden modal => cancel');
+                                    /*console.log('hidden modal => cancel');*/
                                     $('.cancel-inline').trigger('click');
                                 }
                             });
