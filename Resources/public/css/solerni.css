@@ -293,3 +293,6 @@ h3 {
 	color:#FF004F;
 }
 
+.slrn-container-dropzone .alert {
+    display: none;
+}
