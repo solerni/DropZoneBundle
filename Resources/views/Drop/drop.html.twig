@@ -136,11 +136,14 @@
 	                <div class="col-md-12">
 	
 	                    <!-- Button trigger modal -->
-                        {% if dropzone.endAllowDrop|date('d/m/Y') < "now"|date('d/m/Y') %}
-                            <a data-placement="top" data-toggle="tooltip" title="Le délai de dépôt de preuves est expiré" data-original-title="Le délai de dépôt de preuves est expiré" class="btn btn-primary btn-gris pull-right">{{ 'Save and finished'|trans({}, 'icap_dropzone') }}</a>    
-                        {% else %}
-                            <a data-toggle="modal" href="#saveModal" class="btn btn-primary pull-right disabled-during-add">{{ 'Save and finished'|trans({}, 'icap_dropzone') }}</a>
+                        {% if not dropzone.isAllowDrop and ((drop is null or drop.finished == false) and (dropzone.isFinished)) %}
+                            {% set buttonDisabled = true %}
+                            <div class="slrn-grey-block slrn-no-copies">
+                                <p><br />
+                                Le délai de dépôt de preuves est expiré</p>
+                            </div>
                         {% endif %}
+                            <a data-toggle="modal" href="#saveModal" class="btn btn-primary pull-right disabled-during-add {% if buttonDisabled is defined %} disabled{% endif %}">{{ 'Save and finished'|trans({}, 'icap_dropzone') }}</a>
 	                    <!-- Modal -->
 	                    <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	                        <div class="modal-dialog">
